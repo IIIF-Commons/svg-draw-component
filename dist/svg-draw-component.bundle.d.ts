@@ -31,22 +31,22 @@ declare namespace _Components {
     }
 }
 
-declare namespace MyComponents {
-    class ExampleComponent extends _Components.BaseComponent {
-        constructor(options: IExampleComponentOptions);
-        test(): void;
-        protected _init(): boolean;
-        protected _getDefaultOptions(): IExampleComponentOptions;
-        protected _resize(): void;
-    }
-}
-declare namespace MyComponents.ExampleComponent {
-    class Events {
-        static TEST: string;
+declare namespace IIIFComponents {
+    interface ISvgDrawComponentOptions extends _Components.IBaseComponentOptions {
     }
 }
 
-declare namespace MyComponents {
-    interface IExampleComponentOptions extends _Components.IBaseComponentOptions {
+declare namespace IIIFComponents {
+    class SvgDrawComponent extends _Components.BaseComponent {
+        constructor(options: ISvgDrawComponentOptions);
+        test(): void;
+        protected _init(): boolean;
+        protected _getDefaultOptions(): ISvgDrawComponentOptions;
+        protected _resize(): void;
+    }
+}
+declare namespace IIIFComponents.SvgDrawComponent {
+    class Events {
+        static TEST: string;
     }
 }

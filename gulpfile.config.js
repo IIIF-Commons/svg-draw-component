@@ -12,6 +12,7 @@ var GulpConfig = (function () {
         ];
         this.examplesDir = './examples';
         this.examplesDepsDir = './examples/js';
+        this.examplesCssDir = './examples/css';
         // ts definitions to copy to the typings dir
         this.typings = [
             'node_modules/base-component/dist/base-component.d.ts'
@@ -42,6 +43,12 @@ var GulpConfig = (function () {
         };
         this.browserifySrc = this.dist;
         this.browserifyTarget = this.dist;
+        this.cssOut = this.name + '.css';
+        this.cssSrc = [
+            'src/css/**/*.less'
+        ];
+        this.examplesImgDir = './examples/img';
+        this.imgSrc = './src/img/**';
     }
     return GulpConfig;
 })();

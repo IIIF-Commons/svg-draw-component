@@ -9,7 +9,7 @@ namespace IIIFComponents {
         }
 
         public test(): void {
-            this._emit(SvgDrawComponent.Events.TEST, [1, 2, 'three']);
+            this._emit(SvgDrawComponent.Events.TEST, [1, 2, 'three', 'four!']);
         }
 
         protected _init(): boolean {
