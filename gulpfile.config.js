@@ -5,10 +5,12 @@ var GulpConfig = (function () {
         this.name = metadata.name;
         // libs that MUST be included in a consuming app for this component to work
         this.deps = [
-            'node_modules/base-component/dist/base-component.bundle.js'
+            'node_modules/base-component/dist/base-component.bundle.js',
+            'node_modules/paper/dist/paper-full.min.js'
         ];
         // libs that MAY be included in a consuming app but are used here for examples purposes
         this.examplesDeps = [
+            'node_modules/openseadragon/build/**/*'
         ];
         this.examplesDir = './examples';
         this.examplesDepsDir = './examples/js';

@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var utils = require('gulp-utils');
 var path = require('path');
 
+
 gulp.task('copy:bundle', function() {
     return gulp.src([path.join(config.dist, config.jsBundleOut)].concat(config.examplesDeps)).pipe(gulp.dest(config.examplesDepsDir));
 });

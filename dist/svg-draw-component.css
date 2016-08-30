@@ -1,60 +1,19 @@
-body {
-  font-family: Sans-Serif;
-  padding: 20px;
+.openseadragon {
+  width: 800px;
+  height: 600px;
+  border: 1px solid black;
+  color: #333;
+  /* text color for messages */
+  background-color: black;
 }
-.iiif-tree-component {
-  overflow: auto;
+.openseadragon.front-page {
+  height: 586px;
 }
-.iiif-tree-component .toggle {
-  cursor: pointer;
-  margin-top: 3px;
-  margin-right: 5px;
-  display: block;
-  float: left;
-  height: 10px;
-  width: 10px;
-  background-image: url('../img/plus.png');
-}
-.iiif-tree-component .toggle.expanded {
-  background-image: url('../img/minus.png');
-}
-.iiif-tree-component .toggle.multiSelect {
-  margin-left: 5px;
-}
-.iiif-tree-component .spacer {
-  margin-top: 3px;
-  margin-right: 5px;
-  display: block;
-  float: left;
-  height: 10px;
-  width: 10px;
-}
-.iiif-tree-component input.multiSelect {
-  margin-top: 0px;
-  margin-right: 5px;
-  display: block;
-  float: left;
-  height: 13px;
-  width: 13px;
-}
-.iiif-tree-component ul.tree,
-.iiif-tree-component ul.tree ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.iiif-tree-component ul.tree ul {
-  margin-left: 15px;
-}
-.iiif-tree-component ul.tree li {
-  margin: 0;
-  padding: 2px 0 2px 0;
-  overflow: hidden;
-}
-.iiif-tree-component ul.tree li a {
-  display: block;
-  overflow: hidden;
-}
-.iiif-tree-component ul a.selected {
-  color: lightblue;
+.openseadragon-small {
+  width: 100px;
+  height: 80px;
+  border: 1px solid black;
+  color: #333;
+  /* text color for messages */
+  background-color: black;
 }
