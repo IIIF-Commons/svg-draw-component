@@ -16,6 +16,25 @@
           color:      #333; /* text color for messages */
           background-color: black;
       }
+
+        .navigator .highlight{
+            opacity:    0.4;
+            filter:     alpha(opacity=40);
+            outline:    2px solid #900;
+            background-color: #900;
+        }
+        .highlight{
+            opacity:    0.4;
+            filter:     alpha(opacity=40);
+            outline:    12px auto #0A7EbE;
+            background-color: white;
+        }
+        .highlight:hover, .highlight:focus{
+            filter:     alpha(opacity=70);
+            opacity:    0.7;
+            background-color: transparent;
+        }
+
     </style>
 </head>
 <body>
@@ -24,7 +43,7 @@
     // Create a Paper.js Path to draw a line into it:
     var path = new Path();
     // Give the stroke a color
-    path.strokeColor = 'black';
+    path.strokeColor = 'red';
     var start = new Point(100, 100);
     // Move to start and draw a line from there
     path.moveTo(start);
@@ -32,7 +51,7 @@
     // PaperScript does that for us, and much more!
     path.lineTo(start + [ 100, -50 ]);
   </script>
-  <canvas id="myCanvas" resize></canvas>
+  <canvas id="myCanvas" class="highlight" resize></canvas>
 
     <div id="component"></div>
 
@@ -58,22 +77,32 @@
     <div id="osd" class="openseadragon">
 
     <script type="text/javascript">
-        OpenSeadragon({
-            id:                 "osd",
-            prefixUrl:          "/js/openseadragon/images/",
-            tileSources:   [{
-              "@context": "http://iiif.io/api/image/2/context.json",
-              "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000002.jp2",
-              "height": 7200,
-              "width": 5093,
-              "profile": [ "http://iiif.io/api/image/2/level2.json" ],
-              "protocol": "http://iiif.io/api/image",
-              "tiles": [{
-                "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
-                "width": 1024
-              }]
-            }]
-        });
+
+    var viewer = OpenSeadragon({
+        id: "osd",
+        prefixUrl: "/js/openseadragon/images/",
+        tileSources:   [{
+          "@context": "http://iiif.io/api/image/2/context.json",
+          "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000002.jp2",
+          "height": 7200,
+          "width": 5093,
+          "profile": [ "http://iiif.io/api/image/2/level2.json" ],
+          "protocol": "http://iiif.io/api/image",
+          "tiles": [{
+            "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
+            "width": 1024
+          }]
+        }]
+    });
+
+    var element = document.getElementById('myCanvas');
+    var rect = new OpenSeadragon.Rect(0, 0, 1, viewer.viewport.getAspectRatio());
+
+    viewer.addOverlay({
+        element: element,
+        location: rect
+    });
+
     </script>
 
 </body>
