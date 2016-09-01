@@ -19,6 +19,9 @@ var IIIFComponents;
         SvgDrawComponent.prototype.test = function () {
             this._emit(SvgDrawComponent.Events.TEST, [1, 2, 'three', 'four!']);
         };
+        SvgDrawComponent.prototype.addPoint = function (point) {
+            this._emit(SvgDrawComponent.Events.ADDPOINT, point);
+        };
         SvgDrawComponent.prototype._init = function () {
             var success = _super.prototype._init.call(this);
             if (!success) {
@@ -44,6 +47,7 @@ var IIIFComponents;
             function Events() {
             }
             Events.TEST = 'test';
+            Events.ADDPOINT = 'addPoint';
             return Events;
         }());
         SvgDrawComponent.Events = Events;

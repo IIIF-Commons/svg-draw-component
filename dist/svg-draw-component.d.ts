@@ -8,6 +8,7 @@ declare namespace IIIFComponents {
     class SvgDrawComponent extends _Components.BaseComponent {
         constructor(options: ISvgDrawComponentOptions);
         test(): void;
+        addPoint(point: any): void;
         protected _init(): boolean;
         protected _getDefaultOptions(): ISvgDrawComponentOptions;
         protected _resize(): void;
@@ -16,5 +17,6 @@ declare namespace IIIFComponents {
 declare namespace IIIFComponents.SvgDrawComponent {
     class Events {
         static TEST: string;
+        static ADDPOINT: string;
     }
 }

@@ -12,6 +12,10 @@ namespace IIIFComponents {
             this._emit(SvgDrawComponent.Events.TEST, [1, 2, 'three', 'four!']);
         }
 
+        public addPoint(point): void {
+            this._emit(SvgDrawComponent.Events.ADDPOINT, point);
+        }
+
         protected _init(): boolean {
             var success: boolean = super._init();
 
@@ -20,6 +24,7 @@ namespace IIIFComponents {
             }
 
             this._$element.append("I am an example component");
+
 
             return success;
         }
@@ -38,6 +43,7 @@ namespace IIIFComponents {
 namespace IIIFComponents.SvgDrawComponent {
     export class Events {
         static TEST: string = 'test';
+        static ADDPOINT: string = 'addPoint';
     }
 }
 

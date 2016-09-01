@@ -39,40 +39,31 @@
 </head>
 <body>
 
-  <script type="text/paperscript" canvas="myCanvas">
-    // Create a Paper.js Path to draw a line into it:
-    var path = new Path();
-    // Give the stroke a color
-    path.strokeColor = 'red';
-    var start = new Point(100, 100);
-    // Move to start and draw a line from there
-    path.moveTo(start);
-    // Note the plus operator on Point objects.
-    // PaperScript does that for us, and much more!
-    path.lineTo(start + [ 100, -50 ]);
-  </script>
-  <canvas id="myCanvas" class="highlight" resize></canvas>
+<script type="text/paperscript" canvas="svgdraw">// Create a new path once, when the script is executed:
+        //http://jsfiddle.net/uy6g0hq8/
+        var myPath = new Path();
+        myPath.strokeColor = 'red';
 
-    <div id="component"></div>
+        // This function is called whenever the user
+        // clicks the mouse in the view:
+        function onMouseDown(event) {
+        	// Add a segment to the path at the position of the mouse:
+        	myPath.add(event.point);
+        }
 
-    <script>
-
-        var component;
-
-        $(function() {
-
-            component = new IIIFComponents.SvgDrawComponent({
-                element: "#component"
-            });
-
-            component.on('test', function(args) {
-                alert(args);
-            });
-
-            component.test();
-
+        $( "#drawmode" ).on( "click", function() {
+          if (viewer.isMouseNavEnabled() === true) {
+            viewer.setMouseNavEnabled(false)
+            $( this ).text('draw mode (on)')
+          } else {
+            viewer.setMouseNavEnabled(true)
+            $( this ).text('draw mode (off)')
+          }
+          return false; // prevents default link behavior
         });
-    </script>
+
+</script>
+<canvas id="svgdraw" class="highlight" resize></canvas>
 
     <div id="osd" class="openseadragon">
 
@@ -81,6 +72,8 @@
     var viewer = OpenSeadragon({
         id: "osd",
         prefixUrl: "/js/openseadragon/images/",
+        gestureSettingsMouse: { clickToZoom: false },
+        //toolbar: "toolbarDiv",
         tileSources:   [{
           "@context": "http://iiif.io/api/image/2/context.json",
           "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000002.jp2",
@@ -95,8 +88,8 @@
         }]
     });
 
-    var element = document.getElementById('myCanvas');
-    var rect = new OpenSeadragon.Rect(0, 0, 1, viewer.viewport.getAspectRatio());
+    var element = document.getElementById('svgdraw');
+    var rect = new OpenSeadragon.Rect(0, 0, 1, viewer.viewport.getAspectRatio()+.07);
 
     viewer.addOverlay({
         element: element,
@@ -104,6 +97,8 @@
     });
 
     </script>
-
+    <div>
+      <a id="drawmode" href="#">draw mode (off)</a>
+    </div>
 </body>
 </html>
