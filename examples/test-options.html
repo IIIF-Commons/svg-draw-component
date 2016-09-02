@@ -39,18 +39,26 @@
 </head>
 <body>
 
-    <div id="component"></div>
+    <div id="svgdraw"></div>
 
-    <script type="text/paperscript" canvas="svgdraw">
+    <script type="text/paperscript" canvas="canvas-1">
 
         var svgdraw;
 
         $(function() {
 
             svgdraw = new IIIFComponents.SvgDrawComponent({
-                element: "#svgdraw"
+                element: "#svgdraw",
+                overlayType: "img"
             });
 
+            svgdraw.on('debug', function(args) {
+                console.log(args);
+            });
+
+            svgdraw.debug("foo");
+
+            /*
             var p = new Path();
             p.strokeColor = 'red';
             p.strokeWidth = 3;
@@ -58,12 +66,7 @@
             svgdraw.on('addPoint', function(args) {
                 console.log(args);
             });
-
-            tool.onMouseDown = function(event) {
-                p.add(event.point);
-                svgdraw.addPoint(event.point.x);
-            }
-
+            */
         });
     </script>
 
@@ -71,7 +74,7 @@
     <div class="outsideWrapper">
         <div class="insideWrapper">
             <img src="img/floorplan.png" class="coveredImage">
-            <canvas id="svgdraw" class="highlight" height="636" width="1076"></canvas>
+            <canvas id="canvas-1" class="highlight" height="636" width="1076"></canvas>
         </div>
     </div>
 
