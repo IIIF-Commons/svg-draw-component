@@ -17,6 +17,11 @@
           background-color: black;
       }
 
+      .toolbar
+      {
+        width: 800px;
+      }
+
         .navigator .highlight{
             opacity:    0.4;
             filter:     alpha(opacity=40);
@@ -39,15 +44,11 @@
 </head>
 <body>
 
-<script type="text/paperscript" canvas="svgdraw">// Create a new path once, when the script is executed:
-        //http://jsfiddle.net/uy6g0hq8/
+<script type="text/paperscript" canvas="svgdraw">
         var myPath = new Path();
         myPath.strokeColor = 'red';
 
-        // This function is called whenever the user
-        // clicks the mouse in the view:
         function onMouseDown(event) {
-        	// Add a segment to the path at the position of the mouse:
         	myPath.add(event.point);
         }
 
@@ -59,21 +60,28 @@
             viewer.setMouseNavEnabled(true)
             $( this ).text('draw mode (off)')
           }
-          return false; // prevents default link behavior
+          return false;
         });
 
 </script>
-<canvas id="svgdraw" class="highlight" resize></canvas>
+
 
     <div id="osd" class="openseadragon">
+      <canvas id="svgdraw" class="highlight" resize></canvas>
+    </div>
+    <div id="toolbarDiv" class="toolbar">
+        <span style="float:right;margin:10px 20px 0 0;">
+          <a id="drawmode" href="#">draw mode (off)</a>
+        </span>
+    </div>
 
     <script type="text/javascript">
 
     var viewer = OpenSeadragon({
         id: "osd",
-        prefixUrl: "/js/openseadragon/images/",
+        prefixUrl: "js/openseadragon/images/",
         gestureSettingsMouse: { clickToZoom: false },
-        //toolbar: "toolbarDiv",
+        toolbar: "toolbarDiv",
         tileSources:   [{
           "@context": "http://iiif.io/api/image/2/context.json",
           "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000002.jp2",
@@ -97,8 +105,6 @@
     });
 
     </script>
-    <div>
-      <a id="drawmode" href="#">draw mode (off)</a>
-    </div>
+
 </body>
 </html>

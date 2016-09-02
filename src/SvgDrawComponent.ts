@@ -1,5 +1,8 @@
 namespace IIIFComponents {
-    export class SvgDrawComponent extends _Components.BaseComponent {
+    export class SvgDrawComponent extends _Components.BaseComponent implements ISvgDrawComponent{
+
+        public options: ISvgDrawComponentOptions;
+        private _$canvas: JQuery;
 
         constructor(options: ISvgDrawComponentOptions) {
             super(options);
@@ -8,8 +11,8 @@ namespace IIIFComponents {
             this._resize();
         }
 
-        public test(): void {
-            this._emit(SvgDrawComponent.Events.TEST, [1, 2, 'three', 'four!']);
+        public debug(msg): void {
+            this._emit(SvgDrawComponent.Events.DEBUG, msg);
         }
 
         public addPoint(point): void {
@@ -23,14 +26,18 @@ namespace IIIFComponents {
                 console.error("Component failed to initialise");
             }
 
-            this._$element.append("I am an example component");
+            this._$canvas = $('<canvas id="paper"></canvas>');
+            this._$element.append(this._$canvas);
 
+            this.debug(this.options.overlayType);
 
             return success;
         }
 
+
         protected _getDefaultOptions(): ISvgDrawComponentOptions {
             return <ISvgDrawComponentOptions>{
+              overlayType: 'img',
             }
         }
 
@@ -42,7 +49,7 @@ namespace IIIFComponents {
 
 namespace IIIFComponents.SvgDrawComponent {
     export class Events {
-        static TEST: string = 'test';
+        static DEBUG: string = 'debug';
         static ADDPOINT: string = 'addPoint';
     }
 }

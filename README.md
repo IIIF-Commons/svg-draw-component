@@ -1,6 +1,10 @@
 # svg-draw-component
 
-http://viewdir.github.io/svg-draw-component/examples/
+OpenSeadragon (deep zoom) example:
+http://sdellis.com/svg-draw-component/examples/
+
+Basic Image Overlay example:
+http://sdellis.com/svg-draw-component/examples/basic.html
 
     npm install
 
