@@ -12,6 +12,7 @@
 <body>
 
     <div id="svgdraw"></div>
+    <a id="debug" href="#">debug overlayType</a>
 
     <script type="text/javascript">
 
@@ -25,11 +26,14 @@
             });
 
             svgdraw.on('debug', function(args) {
-                console.log(args);
+                alert(args);
             });
 
-            svgdraw.debug("foo");
+        });
 
+        $( "#debug" ).on( "click", function() {
+          svgdraw.debug();
+          return false;
         });
     </script>
 

@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/svg-draw-component.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
-    <script src="js/svg-draw-component.bundle.js"></script>
+    <script src="js/paper-full.min.js"></script>
+    <script src="js/base-component.bundle.js"></script>
+    <script src="js/svg-draw-component.js"></script>
     <style>
         .highlight{
             opacity:    0.4;
@@ -48,7 +50,8 @@
         $(function() {
 
             svgdraw = new IIIFComponents.SvgDrawComponent({
-                element: "#svgdraw"
+                element: "#svgdraw",
+
             });
 
             var p = new Path();

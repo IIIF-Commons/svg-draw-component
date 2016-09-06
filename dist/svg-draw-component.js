@@ -18,8 +18,8 @@ var IIIFComponents;
             this._init();
             this._resize();
         }
-        SvgDrawComponent.prototype.debug = function (msg) {
-            this._emit(SvgDrawComponent.Events.DEBUG, msg);
+        SvgDrawComponent.prototype.debug = function () {
+            this._emit(SvgDrawComponent.Events.DEBUG, this.options.overlayType);
         };
         SvgDrawComponent.prototype.addPoint = function (point) {
             this._emit(SvgDrawComponent.Events.ADDPOINT, point);
@@ -30,8 +30,9 @@ var IIIFComponents;
                 console.error("Component failed to initialise");
             }
             this._$canvas = $('<canvas id="paper"></canvas>');
-            this._$element.append(this._$canvas);
-            this.debug(this.options.overlayType);
+            //this._$element.append(this._$canvas);
+            //this._$element.append(this.options.overlayType);
+            this._$element.append(this.options.overlayType);
             return success;
         };
         SvgDrawComponent.prototype._getDefaultOptions = function () {
