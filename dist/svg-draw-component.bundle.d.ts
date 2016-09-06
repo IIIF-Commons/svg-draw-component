@@ -31,6 +31,7 @@ declare namespace _Components {
     }
 }
 
+// custom definitions go in here
 declare namespace IIIFComponents {
     interface ISvgDrawComponent extends _Components.IBaseComponent {
     }
