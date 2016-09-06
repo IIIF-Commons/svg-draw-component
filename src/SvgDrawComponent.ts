@@ -29,8 +29,6 @@ namespace IIIFComponents {
             this._$canvas = $('<canvas id="paper"></canvas>');
             this._$element.append(this._$canvas);
 
-            this.debug(this.options.overlayType);
-
             return success;
         }
 
@@ -42,7 +40,11 @@ namespace IIIFComponents {
         }
 
         protected _resize(): void {
+            
+        }
 
+        public test(): void {
+            this.debug(this.options.overlayType);
         }
     }
 }

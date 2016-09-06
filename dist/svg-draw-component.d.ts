@@ -20,6 +20,7 @@ declare namespace IIIFComponents {
         protected _init(): boolean;
         protected _getDefaultOptions(): ISvgDrawComponentOptions;
         protected _resize(): void;
+        test(): void;
     }
 }
 declare namespace IIIFComponents.SvgDrawComponent {
