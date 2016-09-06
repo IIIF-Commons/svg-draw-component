@@ -31,7 +31,6 @@ var IIIFComponents;
             }
             this._$canvas = $('<canvas id="paper"></canvas>');
             this._$element.append(this._$canvas);
-            this.debug(this.options.overlayType);
             return success;
         };
         SvgDrawComponent.prototype._getDefaultOptions = function () {
@@ -40,6 +39,9 @@ var IIIFComponents;
             };
         };
         SvgDrawComponent.prototype._resize = function () {
+        };
+        SvgDrawComponent.prototype.test = function () {
+            this.debug(this.options.overlayType);
         };
         return SvgDrawComponent;
     }(_Components.BaseComponent));
