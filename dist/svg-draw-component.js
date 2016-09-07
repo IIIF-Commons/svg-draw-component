@@ -29,6 +29,10 @@ var IIIFComponents;
             if (!success) {
                 console.error("Component failed to initialise");
             }
+            paper.install(window);
+            // Keep global references to both tools, so the HTML
+            // links below can access them.
+            var tool1, tool2, tool3;
             switch (this.options.overlayType) {
                 case 'osd':
                     this._$canvas = $('<canvas id="canvas-1" class="highlight" resize></canvas>');

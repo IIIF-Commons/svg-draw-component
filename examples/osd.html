@@ -43,63 +43,7 @@
             	var tool1, tool2, tool3;
 
               $( document ).ready(function() {
-            		// Get a reference to the canvas object
-            		var canvas = document.getElementById('canvas-1');
-            		// Create an empty project and a view for the canvas:
-            		paper.setup(canvas);
-                
-                // Both share the mouseDown event:
 
-            		var path;
-                var rectangle = null;
-
-            		function onMouseDown(event) {
-            			path = new Path();
-            			path.strokeColor = 'red';
-            			path.add(event.point);
-            		}
-
-                //////////////////
-            		tool1 = new Tool();
-            		tool1.onMouseDown = onMouseDown;
-
-            		tool1.onMouseDrag = function(event) {
-            			path.add(event.point);
-            		}
-
-                //////////////////
-            		tool2 = new Tool();
-            		tool2.minDistance = 20;
-            		tool2.onMouseDown = onMouseDown;
-
-            		tool2.onMouseDrag = function(event) {
-            			// Use the arcTo command to draw cloudy lines
-            			path.arcTo(event.point);
-            		}
-
-                tool3 = new Tool();
-                tool3.onMouseDrag = function(event) {
-                  if (rectangle) {
-                    rectangle.remove();
-                  }
-                  drawRect(event.downPoint, event.point);
-                }
-
-                function drawRect(start, end) {
-                  rectangle = new Path.Rectangle(start, end);
-                  rectangle.strokeColor = 'red';
-                }
-
-                $( "#drawmode" ).on( "click", function() {
-                  if (viewer.isMouseNavEnabled() === true) {
-                    viewer.setMouseNavEnabled(false)
-                    $( this ).text('draw mode (on)')
-                  } else {
-                    viewer.setMouseNavEnabled(true)
-                    $( this ).text('draw mode (off)')
-                  }
-                  return false;
-                });
 
                 var viewer = OpenSeadragon({
                     id: "svgdraw",
@@ -126,6 +70,66 @@
                 viewer.addOverlay({
                     element: element,
                     location: rect
+                });
+
+                viewer.addHandler("open", function() {
+                  // Get a reference to the canvas object
+              		var canvas = document.getElementById('canvas-1');
+              		// Create an empty project and a view for the canvas:
+              		paper.setup(canvas);
+
+                  // Both share the mouseDown event:
+
+              		var path;
+                  var rectangle = null;
+
+              		function onMouseDown(event) {
+              			path = new Path();
+              			path.strokeColor = 'red';
+              			path.add(event.point);
+              		}
+
+                  //////////////////
+              		tool1 = new Tool();
+              		tool1.onMouseDown = onMouseDown;
+
+              		tool1.onMouseDrag = function(event) {
+              			path.add(event.point);
+              		}
+
+                  //////////////////
+              		tool2 = new Tool();
+              		tool2.minDistance = 20;
+              		tool2.onMouseDown = onMouseDown;
+
+              		tool2.onMouseDrag = function(event) {
+              			// Use the arcTo command to draw cloudy lines
+              			path.arcTo(event.point);
+              		}
+
+                  tool3 = new Tool();
+                  tool3.onMouseDrag = function(event) {
+                    if (rectangle) {
+                      rectangle.remove();
+                    }
+                    drawRect(event.downPoint, event.point);
+                  }
+
+                  function drawRect(start, end) {
+                    rectangle = new Path.Rectangle(start, end);
+                    rectangle.strokeColor = 'red';
+                  }
+
+                  $( "#drawmode" ).on( "click", function() {
+                    if (viewer.isMouseNavEnabled() === true) {
+                      viewer.setMouseNavEnabled(false)
+                      $( this ).text('draw mode (on)')
+                    } else {
+                      viewer.setMouseNavEnabled(true)
+                      $( this ).text('draw mode (off)')
+                    }
+                    return false;
+                  });
                 });
 
             });
