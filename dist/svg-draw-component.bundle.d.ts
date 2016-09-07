@@ -47,8 +47,9 @@ declare namespace IIIFComponents {
     class SvgDrawComponent extends _Components.BaseComponent implements ISvgDrawComponent {
         options: ISvgDrawComponentOptions;
         private _$canvas;
+        private _$wrapper;
         constructor(options: ISvgDrawComponentOptions);
-        debug(msg: any): void;
+        debug(): void;
         addPoint(point: any): void;
         protected _init(): boolean;
         protected _getDefaultOptions(): ISvgDrawComponentOptions;

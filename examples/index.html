@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/svg-draw-component.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
+    <script src="js/paper-full.min.js"></script>
     <script src="js/base-component.bundle.js"></script>
     <script src="js/svg-draw-component.js"></script>
     <script src="js/openseadragon/openseadragon.min.js"></script>
@@ -45,24 +46,99 @@
 </head>
 <body>
 
-<script type="text/paperscript" canvas="svgdraw">
-        var myPath = new Path();
-        myPath.strokeColor = 'red';
+<script type="text/javascript">
 
-        function onMouseDown(event) {
-        	myPath.add(event.point);
-        }
+        var svgdraw;
 
-        $( "#drawmode" ).on( "click", function() {
-          if (viewer.isMouseNavEnabled() === true) {
-            viewer.setMouseNavEnabled(false)
-            $( this ).text('draw mode (on)')
-          } else {
-            viewer.setMouseNavEnabled(true)
-            $( this ).text('draw mode (off)')
-          }
-          return false;
+        $(function() {
+
+            svgdraw = new IIIFComponents.SvgDrawComponent({
+                element: "#svgdraw",
+                overlayType: "img"
+            });
+
+            svgdraw.on('debug', function(args) {
+                console.log(args);
+            });
+
         });
+
+        paper.install(window);
+        // Keep global references to both tools, so the HTML
+      	// links below can access them.
+      	var tool1, tool2, tool3;
+
+        window.onload = function() {
+      		// Get a reference to the canvas object
+      		var canvas = document.getElementById('svgdraw');
+      		// Create an empty project and a view for the canvas:
+      		paper.setup(canvas);
+          // Both share the mouseDown event:
+      		var path;
+          var rectangle = null;
+
+      		function onMouseDown(event) {
+      			path = new Path();
+      			path.strokeColor = 'red';
+      			path.add(event.point);
+      		}
+
+          //////////////////
+      		tool1 = new Tool();
+      		tool1.onMouseDown = onMouseDown;
+
+      		tool1.onMouseDrag = function(event) {
+      			path.add(event.point);
+      		}
+
+          //////////////////
+      		tool2 = new Tool();
+      		tool2.minDistance = 20;
+      		tool2.onMouseDown = onMouseDown;
+
+      		tool2.onMouseDrag = function(event) {
+      			// Use the arcTo command to draw cloudy lines
+      			path.arcTo(event.point);
+      		}
+
+          tool3 = new Tool();
+          tool3.onMouseDrag = function(event) {
+            if (rectangle) {
+              rectangle.remove();
+            }
+            drawRect(event.downPoint, event.point);
+          }
+
+          function drawRect(start, end) {
+            rectangle = new Path.Rectangle(start, end);
+            rectangle.strokeColor = 'red';
+          }
+
+          $( "#drawmode" ).on( "click", function() {
+            if (viewer.isMouseNavEnabled() === true) {
+              viewer.setMouseNavEnabled(false)
+              $( this ).text('draw mode (on)')
+            } else {
+              viewer.setMouseNavEnabled(true)
+              $( this ).text('draw mode (off)')
+            }
+            return false;
+          });
+      	}
+/*
+        $( document ).ready(function() {
+          $( "#drawmode" ).on( "click", function() {
+            if (viewer.isMouseNavEnabled() === true) {
+              viewer.setMouseNavEnabled(false)
+              $( this ).text('draw mode (on)')
+            } else {
+              viewer.setMouseNavEnabled(true)
+              $( this ).text('draw mode (off)')
+            }
+            return false;
+          });
+        });
+*/
 
 </script>
 
@@ -72,7 +148,10 @@
     </div>
     <div id="toolbarDiv" class="toolbar">
         <span style="float:right;margin:10px 20px 0 0;">
-          <a id="drawmode" href="#">draw mode (off)</a>
+          <a id="drawmode" href="#">draw mode (off)</a> |
+          <a href="#" onclick="tool1.activate();">Lines</a> |
+          <a href="#" onclick="tool2.activate();">Clouds</a> |
+          <a href="#" onclick="tool3.activate();">Rect</a>
         </span>
     </div>
 

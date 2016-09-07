@@ -5,75 +5,85 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/svg-draw-component.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
-    <script src="js/svg-draw-component.bundle.js"></script>
-    <style>
-        .highlight{
-            opacity:    0.4;
-            filter:     alpha(opacity=40);
-            outline:    12px auto #0A7EbE;
-            background-color: white;
-        }
-        .highlight:hover, .highlight:focus{
-            filter:     alpha(opacity=70);
-            opacity:    0.7;
-            background-color: transparent;
-        }
-
-        .outsideWrapper{
-            width:1076px; height:636px;
-            margin:20px 60px;
-            border:1px solid blue;}
-        .insideWrapper{
-            width:100%; height:100%;
-            position:relative;}
-        .coveredImage{
-            width:100%; height:100%;
-            position:absolute; top:0px; left:0px;
-        }
-        .coveringCanvas{
-            width:100%; height:100%;
-            position:absolute; top:0px; left:0px;
-            background-color: rgba(255,0,0,.1);
-        }
-    </style>
+    <script src="js/paper-full.min.js"></script>
+    <script src="js/base-component.bundle.js"></script>
+    <script src="js/svg-draw-component.js"></script>
 </head>
-<body>
+<body class="svg-draw-component">
 
-    <div id="component"></div>
+    <div id="svgdraw"></div>
+    <a href="#" onclick="tool1.activate();">Lines</a> |
+    <a href="#" onclick="tool2.activate();">Clouds</a> |
+    <a href="#" onclick="tool3.activate();">Rect</a>
 
-    <script type="text/paperscript" canvas="svgdraw">
+    <script type="text/javascript">
 
         var svgdraw;
 
         $(function() {
 
             svgdraw = new IIIFComponents.SvgDrawComponent({
-                element: "#svgdraw"
+              element: "#svgdraw",
+              overlayType: "img"
             });
-
-            var p = new Path();
-            p.strokeColor = 'red';
-            p.strokeWidth = 3;
-
-            svgdraw.on('addPoint', function(args) {
-                console.log(args);
-            });
-
-            tool.onMouseDown = function(event) {
-                p.add(event.point);
-                svgdraw.addPoint(event.point.x);
-            }
 
         });
+
+        paper.install(window);
+        // Keep global references to both tools, so the HTML
+        // links below can access them.
+        var tool1, tool2, tool3;
+
+        window.onload = function() {
+          // Get a reference to the canvas object
+          var canvas = document.getElementById('canvas-1');
+          // Create an empty project and a view for the canvas:
+          paper.setup(canvas);
+          // Both share the mouseDown event:
+          var path;
+          var rectangle = null;
+
+          function onMouseDown(event) {
+            path = new Path();
+            path.strokeColor = 'red';
+            path.add(event.point);
+          }
+
+          //////////////////
+          tool1 = new Tool();
+          tool1.onMouseDown = onMouseDown;
+
+          tool1.onMouseDrag = function(event) {
+            path.add(event.point);
+          }
+
+          //////////////////
+          tool2 = new Tool();
+          tool2.minDistance = 20;
+          tool2.onMouseDown = onMouseDown;
+
+          tool2.onMouseDrag = function(event) {
+            // Use the arcTo command to draw cloudy lines
+            path.arcTo(event.point);
+          }
+
+          //////////////////
+          tool3 = new Tool();
+          tool3.onMouseDrag = function(event) {
+            if (rectangle) {
+              rectangle.remove();
+            }
+            drawRect(event.downPoint, event.point);
+          }
+
+          function drawRect(start, end) {
+            rectangle = new Path.Rectangle(start, end);
+            rectangle.strokeColor = 'red';
+          }
+        };
+
+
     </script>
-
-
-    <div class="outsideWrapper">
-        <div class="insideWrapper">
-            <img src="img/floorplan.png" class="coveredImage">
-            <canvas id="svgdraw" class="highlight" height="636" width="1076"></canvas>
-        </div>
-    </div>
 
 
 </body>
