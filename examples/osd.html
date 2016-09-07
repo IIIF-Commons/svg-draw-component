@@ -35,10 +35,6 @@
                       overlayType: "osd"
                   });
 
-                  svgdraw.on('debug', function(args) {
-                      console.log(args);
-                  });
-
               });
 
               paper.install(window);
@@ -46,12 +42,14 @@
             	// links below can access them.
             	var tool1, tool2, tool3;
 
-              window.onload = function() {
+              $( document ).ready(function() {
             		// Get a reference to the canvas object
             		var canvas = document.getElementById('canvas-1');
             		// Create an empty project and a view for the canvas:
             		paper.setup(canvas);
+                
                 // Both share the mouseDown event:
+
             		var path;
                 var rectangle = null;
 
@@ -130,7 +128,7 @@
                     location: rect
                 });
 
-            };
+            });
 
 
 

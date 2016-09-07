@@ -12,9 +12,6 @@
 <body class="svg-draw-component">
 
     <div id="svgdraw"></div>
-    <a href="#" onclick="tool1.activate();">Lines</a> |
-    <a href="#" onclick="tool2.activate();">Clouds</a> |
-    <a href="#" onclick="tool3.activate();">Rect</a>
 
     <script type="text/javascript">
 
@@ -23,8 +20,12 @@
         $(function() {
 
             svgdraw = new IIIFComponents.SvgDrawComponent({
-              element: "#svgdraw",
-              overlayType: "img"
+                element: "#svgdraw",
+                overlayType: ""
+            });
+
+            svgdraw.on('debug', function(args) {
+                alert(args);
             });
 
         });
@@ -82,9 +83,9 @@
           }
         };
 
-
     </script>
-
-
+    <a href="#" onclick="tool1.activate();">Lines</a> |
+    <a href="#" onclick="tool2.activate();">Clouds</a> |
+    <a href="#" onclick="tool3.activate();">Rect</a>
 </body>
 </html>
