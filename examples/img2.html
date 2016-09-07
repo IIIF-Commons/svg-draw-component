@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>svg-draw-component: test</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/svg-draw-component.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
+    <script src="js/paper-full.min.js"></script>
+    <script src="js/base-component.bundle.js"></script>
+    <script src="js/svg-draw-component.js"></script>
+</head>
+<body class="svg-draw-component">
+
+    <div id="svgdraw"></div>
+    <a href="#" onclick="tool1.activate();">Lines</a> |
+    <a href="#" onclick="tool2.activate();">Clouds</a> |
+    <a href="#" onclick="tool3.activate();">Rect</a>
+
+    <script type="text/javascript">
+
+        var svgdraw;
+
+        $(function() {
+
+            svgdraw = new IIIFComponents.SvgDrawComponent({
+              element: "#svgdraw",
+              overlayType: "img"
+            });
+
+        });
+
+        paper.install(window);
+        // Keep global references to both tools, so the HTML
+        // links below can access them.
+        var tool1, tool2, tool3;
+
+        window.onload = function() {
+          // Get a reference to the canvas object
+          var canvas = document.getElementById('canvas-1');
+          // Create an empty project and a view for the canvas:
+          paper.setup(canvas);
+
+          // Both share the mouseDown event:
+          var path;
+
+          function onMouseDown(event) {
+            path = new Path();
+            path.strokeColor = 'red';
+            path.add(event.point);
+          }
+
+          ////// S T R A I G H T  L I N E S ////////////
+          tool1 = new Tool();
+          tool1.onMouseDown = onMouseDown;
+
+          tool1.onMouseDrag = function(event) {
+            path.add(event.point);
+          }
+
+          ////// C L O U D Y  L I N E S ////////////
+          tool2 = new Tool();
+          tool2.minDistance = 20;
+          tool2.onMouseDown = onMouseDown;
+
+          tool2.onMouseDrag = function(event) {
+            // Use the arcTo command to draw cloudy lines
+            path.arcTo(event.point);
+          }
+
+          ////// R E C T A N G L E ////////////
+          var rectangle = null;
+          tool3 = new Tool();
+          tool3.onMouseDrag = function(event) {
+            if (rectangle) {
+              rectangle.remove();
+            }
+            drawRect(event.downPoint, event.point);
+          }
+
+          function drawRect(start, end) {
+            rectangle = new Path.Rectangle(start, end);
+            rectangle.strokeColor = 'red';
+          }
+        };
+
+
+    </script>
+
+
+</body>
+</html>
