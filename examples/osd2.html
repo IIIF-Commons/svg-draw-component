@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>svg-draw-component: test</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/svg-draw-component.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
+    <script src="js/paper-full.min.js"></script>
+    <script src="js/base-component.bundle.js"></script>
+    <script src="js/svg-draw-component.js"></script>
+    <script src="js/openseadragon/openseadragon.min.js"></script>
+    <style>
+      .openseadragon
+      {
+          width:      800px;
+          height:     600px;
+          border:     1px solid black;
+          color:      #333; /* text color for messages */
+          background-color: black;
+      }
+
+      .toolbar
+      {
+        width: 800px;
+      }
+
+        .navigator .highlight{
+            opacity:    0.4;
+            filter:     alpha(opacity=40);
+            outline:    2px solid #900;
+            background-color: #900;
+        }
+        .highlight{
+            opacity:    0.4;
+            filter:     alpha(opacity=40);
+            outline:    12px auto #0A7EbE;
+            background-color: white;
+        }
+        .highlight:hover, .highlight:focus{
+            filter:     alpha(opacity=70);
+            opacity:    0.7;
+            background-color: transparent;
+        }
+
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+        var svgdraw;
+
+        $(function() {
+
+            svgdraw = new IIIFComponents.SvgDrawComponent({
+                element: "#svgdraw",
+                overlayType: "osd"
+            });
+
+            svgdraw.on('debug', function(args) {
+                console.log(args);
+            });
+
+        });
+
+        paper.install(window);
+        // Keep global references to both tools, so the HTML
+      	// links below can access them.
+      	var tool1, tool2, tool3;
+
+        window.onload = function() {
+      		// Get a reference to the canvas object
+      		var canvas = document.getElementById('svgdraw');
+      		// Create an empty project and a view for the canvas:
+      		paper.setup(canvas);
+          // Both share the mouseDown event:
+      		var path;
+          var rectangle = null;
+
+      		function onMouseDown(event) {
+      			path = new Path();
+      			path.strokeColor = 'red';
+      			path.add(event.point);
+      		}
+
+          //////////////////
+      		tool1 = new Tool();
+      		tool1.onMouseDown = onMouseDown;
+
+      		tool1.onMouseDrag = function(event) {
+      			path.add(event.point);
+      		}
+
+          //////////////////
+      		tool2 = new Tool();
+      		tool2.minDistance = 20;
+      		tool2.onMouseDown = onMouseDown;
+
+      		tool2.onMouseDrag = function(event) {
+      			// Use the arcTo command to draw cloudy lines
+      			path.arcTo(event.point);
+      		}
+
+          tool3 = new Tool();
+          tool3.onMouseDrag = function(event) {
+            if (rectangle) {
+              rectangle.remove();
+            }
+            drawRect(event.downPoint, event.point);
+          }
+
+          function drawRect(start, end) {
+            rectangle = new Path.Rectangle(start, end);
+            rectangle.strokeColor = 'red';
+          }
+
+          $( "#drawmode" ).on( "click", function() {
+            if (viewer.isMouseNavEnabled() === true) {
+              viewer.setMouseNavEnabled(false)
+              $( this ).text('draw mode (on)')
+            } else {
+              viewer.setMouseNavEnabled(true)
+              $( this ).text('draw mode (off)')
+            }
+            return false;
+          });
+      	}
+/*
+        $( document ).ready(function() {
+          $( "#drawmode" ).on( "click", function() {
+            if (viewer.isMouseNavEnabled() === true) {
+              viewer.setMouseNavEnabled(false)
+              $( this ).text('draw mode (on)')
+            } else {
+              viewer.setMouseNavEnabled(true)
+              $( this ).text('draw mode (off)')
+            }
+            return false;
+          });
+        });
+*/
+
+</script>
+
+
+    <div id="osd" class="openseadragon">
+      <canvas id="svgdraw" class="highlight" resize></canvas>
+    </div>
+    <div id="toolbarDiv" class="toolbar">
+        <span style="float:right;margin:10px 20px 0 0;">
+          <a id="drawmode" href="#">draw mode (off)</a> |
+          <a href="#" onclick="tool1.activate();">Lines</a> |
+          <a href="#" onclick="tool2.activate();">Clouds</a> |
+          <a href="#" onclick="tool3.activate();">Rect</a>
+        </span>
+    </div>
+
+    <script type="text/javascript">
+
+    var viewer = OpenSeadragon({
+        id: "osd",
+        prefixUrl: "js/openseadragon/images/",
+        gestureSettingsMouse: { clickToZoom: false },
+        toolbar: "toolbarDiv",
+        tileSources:   [{
+          "@context": "http://iiif.io/api/image/2/context.json",
+          "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000002.jp2",
+          "height": 7200,
+          "width": 5093,
+          "profile": [ "http://iiif.io/api/image/2/level2.json" ],
+          "protocol": "http://iiif.io/api/image",
+          "tiles": [{
+            "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
+            "width": 1024
+          }]
+        }]
+    });
+
+    var element = document.getElementById('svgdraw');
+    var rect = new OpenSeadragon.Rect(0, 0, 1, viewer.viewport.getAspectRatio()+.07);
+
+    viewer.addOverlay({
+        element: element,
+        location: rect
+    });
+
+    </script>
+
+</body>
+</html>

@@ -12,6 +12,9 @@
 <body class="svg-draw-component">
 
     <div id="svgdraw"></div>
+    <a href="#" onclick="tool1.activate();">Lines</a> |
+    <a href="#" onclick="tool2.activate();">Clouds</a> |
+    <a href="#" onclick="tool3.activate();">Rect</a>
 
     <script type="text/javascript">
 
@@ -20,11 +23,8 @@
         $(function() {
 
             svgdraw = new IIIFComponents.SvgDrawComponent({
-                element: "#svgdraw"
-            });
-
-            svgdraw.on('debug', function(args) {
-                alert(args);
+              element: "#svgdraw",
+              overlayType: "img"
             });
 
         });
@@ -39,9 +39,9 @@
           var canvas = document.getElementById('canvas-1');
           // Create an empty project and a view for the canvas:
           paper.setup(canvas);
+
           // Both share the mouseDown event:
           var path;
-          var rectangle = null;
 
           function onMouseDown(event) {
             path = new Path();
@@ -49,7 +49,7 @@
             path.add(event.point);
           }
 
-          //////////////////
+          ////// S T R A I G H T  L I N E S ////////////
           tool1 = new Tool();
           tool1.onMouseDown = onMouseDown;
 
@@ -57,7 +57,7 @@
             path.add(event.point);
           }
 
-          //////////////////
+          ////// C L O U D Y  L I N E S ////////////
           tool2 = new Tool();
           tool2.minDistance = 20;
           tool2.onMouseDown = onMouseDown;
@@ -67,7 +67,8 @@
             path.arcTo(event.point);
           }
 
-          //////////////////
+          ////// R E C T A N G L E ////////////
+          var rectangle = null;
           tool3 = new Tool();
           tool3.onMouseDrag = function(event) {
             if (rectangle) {
@@ -82,9 +83,9 @@
           }
         };
 
+
     </script>
-    <a href="#" onclick="tool1.activate();">Lines</a> |
-    <a href="#" onclick="tool2.activate();">Clouds</a> |
-    <a href="#" onclick="tool3.activate();">Rect</a>
+
+
 </body>
 </html>
