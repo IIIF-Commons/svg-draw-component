@@ -3,6 +3,7 @@ namespace IIIFComponents {
 
         public options: ISvgDrawComponentOptions;
         private _$canvas: JQuery;
+        private _$wrapper: JQuery;
 
         constructor(options: ISvgDrawComponentOptions) {
             super(options);
@@ -26,10 +27,19 @@ namespace IIIFComponents {
                 console.error("Component failed to initialise");
             }
 
-            this._$canvas = $('<canvas id="paper"></canvas>');
+            switch (this.options.overlayType) {
+              case 'osd':
+                  this._$canvas = $('<canvas id="canvas-1" class="highlight" resize></canvas>');
+                  break;
+              case 'img':
+                  this._$canvas = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
+                  break;
+              default:
+                  this._$canvas = $('<canvas id="canvas-1" class="paper"></canvas>');
+            }
+
             this._$element.append(this._$canvas);
-            //this._$element.append(this.options.overlayType);
-            //this._$element.append(this.options.overlayType);
+
             return success;
         }
 

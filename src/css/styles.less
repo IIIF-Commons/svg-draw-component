@@ -2,4 +2,62 @@
 
 .svg-draw-component{
 
+  .openseadragon
+  {
+      width:      800px;
+      height:     600px;
+      border:     1px solid black;
+      color:      #333; /* text color for messages */
+      background-color: black;
+  }
+
+  .toolbar
+  {
+    width: 800px;
+  }
+
+  .navigator .highlight{
+      opacity:    0.4;
+      filter:     alpha(opacity=40);
+      outline:    2px solid #900;
+      background-color: #900;
+  }
+
+  .highlight{
+      opacity:    0.4;
+      filter:     alpha(opacity=40);
+      outline:    12px auto #0A7EbE;
+      background-color: white;
+  }
+
+  .highlight:hover, .highlight:focus{
+      filter:     alpha(opacity=70);
+      opacity:    0.7;
+      background-color: transparent;
+  }
+
+  // for image overlays
+  .outsideWrapper{
+      width:636px; height:494px;
+      margin:20px 60px;
+      border:1px solid blue;}
+  .insideWrapper{
+      width:100%; height:100%;
+      position:relative;}
+  .coveredImage{
+      width:100%; height:100%;
+      position:absolute; top:0px; left:0px;
+  }
+  .coveringCanvas{
+      width:100%; height:100%;
+      position:absolute; top:0px; left:0px;
+  }
+
+  // for plain canvas
+  .paper{
+        width:800px; height:600px;
+        margin:20px 60px;
+        border:1px solid blue;
+        background-color: rgba(158, 167, 184, 0.2);}
+
 }
