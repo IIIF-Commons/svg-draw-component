@@ -24,12 +24,14 @@
                 overlayType: ""
             });
 
-            svgdraw.on('debug', function(args) {
-                alert(args);
+            svgdraw.on('paperSetup', function(args) {
+                console.log(args);
             });
 
-        });
+            svgdraw.paperSetup('Paper setup complete!');
 
+        });
+/*
         paper.install(window);
         // Keep global references to both tools, so the HTML
         // links below can access them.
@@ -82,10 +84,11 @@
             rectangle.strokeColor = 'red';
           }
         };
-
+*/
     </script>
+    <!--
     <a href="#" onclick="tool1.activate();">Lines</a> |
     <a href="#" onclick="tool2.activate();">Clouds</a> |
-    <a href="#" onclick="tool3.activate();">Rect</a>
+    <a href="#" onclick="tool3.activate();">Rect</a>-->
 </body>
 </html>

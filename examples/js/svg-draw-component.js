@@ -21,18 +21,30 @@ var IIIFComponents;
         SvgDrawComponent.prototype.debug = function () {
             this._emit(SvgDrawComponent.Events.DEBUG, this.options.overlayType);
         };
-        SvgDrawComponent.prototype.addPoint = function (point) {
-            this._emit(SvgDrawComponent.Events.ADDPOINT, point);
+        SvgDrawComponent.prototype.paperSetup = function (msg) {
+            $(this._$canvas).css("background-color", "yellow");
+            this.mypaper = new paper.PaperScope();
+            this.mypaper.setup(this._$canvas);
+            this.mypaper.tool1 = new this.mypaper.Tool();
+            // Create a Paper.js Path to draw a line into it:
+            this.path = new this.mypaper.Path();
+            // Give the stroke a color
+            this.path.strokeColor = 'red';
+            this.start = new this.mypaper.Point(100, 100);
+            // Move to start and draw a line from there
+            this.path.moveTo(this.start);
+            // Note that the plus operator on Point objects does not work
+            // in JavaScript. Instead, we need to call the add() function:
+            this.path.lineTo(this.start.add([200, -50]));
+            // Draw the view now:
+            this.mypaper.view.draw();
+            this._emit(SvgDrawComponent.Events.PAPERSETUP, msg);
         };
         SvgDrawComponent.prototype._init = function () {
             var success = _super.prototype._init.call(this);
             if (!success) {
                 console.error("Component failed to initialise");
             }
-            paper.install(window);
-            // Keep global references to both tools, so the HTML
-            // links below can access them.
-            var tool1, tool2, tool3;
             switch (this.options.overlayType) {
                 case 'osd':
                     this._$canvas = $('<canvas id="canvas-1" class="highlight" resize></canvas>');
@@ -65,7 +77,7 @@ var IIIFComponents;
             function Events() {
             }
             Events.DEBUG = 'debug';
-            Events.ADDPOINT = 'addPoint';
+            Events.PAPERSETUP = 'paperSetup';
             return Events;
         }());
         SvgDrawComponent.Events = Events;
