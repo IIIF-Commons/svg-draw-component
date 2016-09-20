@@ -20,11 +20,13 @@ var IIIFComponents;
         };
         SvgDrawComponent.prototype.addToolbar = function () {
             var _this = this;
+            var tools = [
+                $('<li><button id="tool1">Lines</button></li>'),
+                $('<li><button id="tool2">Clouds</button></li>'),
+                $('<li><button id="tool3">Rect</button></li>')
+            ];
             this._$toolbar = $('<ul/>');
-            this._$tool1 = $('<li><button id="tool1">Lines</button></li>');
-            this._$tool2 = $('<li><button id="tool2">Clouds</button></li>');
-            this._$tool3 = $('<li><button id="tool3">Rect</button></li>');
-            this._$toolbar.append([this._$tool1, this._$tool2, this._$tool3]);
+            this._$toolbar.append(tools);
             this._$element.append(this._$toolbar);
             $("button").on("click", function (e) {
                 switch (e.target.id) {
