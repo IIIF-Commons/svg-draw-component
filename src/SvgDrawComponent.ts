@@ -6,9 +6,11 @@ namespace IIIFComponents {
         public options: ISvgDrawComponentOptions;
         private _$canvas: JQuery;
         private _$wrapper: JQuery;
+        private _$toolbar: JQuery;
+        private _$tool1: JQuery;
+        private _$tool2: JQuery;
+        private _$tool3: JQuery;
         public mypaper: any;
-        public path: any;
-        public start: any;
 
         constructor(options: ISvgDrawComponentOptions) {
             super(options);
@@ -21,27 +23,83 @@ namespace IIIFComponents {
             this._emit(SvgDrawComponent.Events.DEBUG, this.options.overlayType);
         }
 
-        public paperSetup(msg): void {
+        public shapeComplete(msg): void {
+            this._emit(SvgDrawComponent.Events.SHAPECOMPLETE, msg);
+        }
 
-              $(this._$canvas).css("background-color", "yellow");
+        public addToolbar(): void {
+          var _this = this;
+          this._$toolbar = $('<ul/>');
+          this._$tool1 = $('<li><button id="tool1">Lines</button></li>');
+          this._$tool2 = $('<li><button id="tool2">Clouds</button></li>');
+          this._$tool3 = $('<li><button id="tool3">Rect</button></li>');
+          this._$toolbar.append([this._$tool1,this._$tool2,this._$tool3]);
+          this._$element.append(this._$toolbar);
+
+          $( "button" ).on( "click", function(e) {
+            switch (e.target.id) {
+              case 'tool1':
+                  _this.mypaper.tool1.activate();
+                  break;
+              case 'tool2':
+                  _this.mypaper.tool2.activate();
+                  break;
+              case 'tool3':
+                  _this.mypaper.tool3.activate();
+                  break;
+              default:
+                  _this.mypaper.tool1.activate();
+            }
+          });
+        }
+
+
+        public paperSetup(el): void {
+              var path, start
+              var rectangle = null;
+              var _this = this;
+
               this.mypaper = new paper.PaperScope();
-          		this.mypaper.setup(this._$canvas);
+          		this.mypaper.setup(el);
 
+              path = new this.mypaper.Path();
+
+              function onMouseDown(event) {
+                path.strokeColor = 'red';
+                path.add(event.point);
+              }
+
+              ////// S T R A I G H T  L I N E S ////////////
               this.mypaper.tool1 = new this.mypaper.Tool();
-          		// Create a Paper.js Path to draw a line into it:
-          		this.path = new this.mypaper.Path();
-          		// Give the stroke a color
-          		this.path.strokeColor = 'red';
-          		this.start = new this.mypaper.Point(100, 100);
-          		// Move to start and draw a line from there
-          		this.path.moveTo(this.start);
-          		// Note that the plus operator on Point objects does not work
-          		// in JavaScript. Instead, we need to call the add() function:
-          		this.path.lineTo(this.start.add([ 200, -50 ]));
-          		// Draw the view now:
-              this.mypaper.view.draw();
+              this.mypaper.tool1.onMouseDown = onMouseDown;
+              this.mypaper.tool1.onMouseDrag = function(event) {
+                path.add(event.point);
+              }
 
-            this._emit(SvgDrawComponent.Events.PAPERSETUP, msg);
+              ////// C L O U D Y  L I N E S ////////////
+              this.mypaper.tool2 = new this.mypaper.Tool();
+              this.mypaper.tool2.minDistance = 20;
+              this.mypaper.tool2.onMouseDown = onMouseDown;
+
+              this.mypaper.tool2.onMouseDrag = function(event) {
+                // Use the arcTo command to draw cloudy lines
+                path.arcTo(event.point);
+              }
+
+              ////// R E C T A N G L E ////////////
+              this.mypaper.tool3 = new this.mypaper.Tool();
+              this.mypaper.tool3.onMouseDrag = function(event) {
+                if (rectangle) {
+                  rectangle.remove();
+                }
+                drawRect(event.downPoint, event.point);
+              }
+
+              function drawRect(start, end) {
+                rectangle = new _this.mypaper.Path.Rectangle(start, end);
+                rectangle.strokeColor = 'red';
+              }
+
         }
 
         protected _init(): boolean {
@@ -53,17 +111,20 @@ namespace IIIFComponents {
 
             switch (this.options.overlayType) {
               case 'osd':
-                  this._$canvas = $('<canvas id="canvas-1" class="highlight" resize></canvas>');
+                  this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
                   break;
               case 'img':
-                  this._$canvas = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
+                  this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
                   break;
               default:
-                  this._$canvas = $('<canvas id="canvas-1" class="paper"></canvas>');
+                  this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
             }
 
-            this._$element.append(this._$canvas);
 
+            this._$canvas = this._$wrapper.find('#canvas-1');
+            this._$element.append(this._$wrapper);
+            this.paperSetup(this._$canvas[0]);
+            this.addToolbar();
 
             return success;
         }
@@ -84,7 +145,7 @@ namespace IIIFComponents {
 namespace IIIFComponents.SvgDrawComponent {
     export class Events {
         static DEBUG: string = 'debug';
-        static PAPERSETUP: string = 'paperSetup';
+        static SHAPECOMPLETE: string = 'shapeComplete';
     }
 }
 

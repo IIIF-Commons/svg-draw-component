@@ -49,12 +49,16 @@ declare namespace IIIFComponents {
         options: ISvgDrawComponentOptions;
         private _$canvas;
         private _$wrapper;
+        private _$toolbar;
+        private _$tool1;
+        private _$tool2;
+        private _$tool3;
         mypaper: any;
-        path: any;
-        start: any;
         constructor(options: ISvgDrawComponentOptions);
         debug(): void;
-        paperSetup(msg: any): void;
+        shapeComplete(msg: any): void;
+        addToolbar(): void;
+        paperSetup(el: any): void;
         protected _init(): boolean;
         protected _getDefaultOptions(): ISvgDrawComponentOptions;
         protected _resize(): void;
@@ -63,6 +67,6 @@ declare namespace IIIFComponents {
 declare namespace IIIFComponents.SvgDrawComponent {
     class Events {
         static DEBUG: string;
-        static PAPERSETUP: string;
+        static SHAPECOMPLETE: string;
     }
 }

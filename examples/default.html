@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>svg-draw-component: test</title>
+    <title>svg-draw-component: default test</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/svg-draw-component.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
@@ -24,71 +24,12 @@
                 overlayType: ""
             });
 
-            svgdraw.on('paperSetup', function(args) {
+            svgdraw.on('shapeComplete', function(args) {
                 console.log(args);
             });
 
-            svgdraw.paperSetup('Paper setup complete!');
-
         });
-/*
-        paper.install(window);
-        // Keep global references to both tools, so the HTML
-        // links below can access them.
-        var tool1, tool2, tool3;
 
-        window.onload = function() {
-          // Get a reference to the canvas object
-          var canvas = document.getElementById('canvas-1');
-          // Create an empty project and a view for the canvas:
-          paper.setup(canvas);
-          // Both share the mouseDown event:
-          var path;
-          var rectangle = null;
-
-          function onMouseDown(event) {
-            path = new Path();
-            path.strokeColor = 'red';
-            path.add(event.point);
-          }
-
-          //////////////////
-          tool1 = new Tool();
-          tool1.onMouseDown = onMouseDown;
-
-          tool1.onMouseDrag = function(event) {
-            path.add(event.point);
-          }
-
-          //////////////////
-          tool2 = new Tool();
-          tool2.minDistance = 20;
-          tool2.onMouseDown = onMouseDown;
-
-          tool2.onMouseDrag = function(event) {
-            // Use the arcTo command to draw cloudy lines
-            path.arcTo(event.point);
-          }
-
-          //////////////////
-          tool3 = new Tool();
-          tool3.onMouseDrag = function(event) {
-            if (rectangle) {
-              rectangle.remove();
-            }
-            drawRect(event.downPoint, event.point);
-          }
-
-          function drawRect(start, end) {
-            rectangle = new Path.Rectangle(start, end);
-            rectangle.strokeColor = 'red';
-          }
-        };
-*/
     </script>
-    <!--
-    <a href="#" onclick="tool1.activate();">Lines</a> |
-    <a href="#" onclick="tool2.activate();">Clouds</a> |
-    <a href="#" onclick="tool3.activate();">Rect</a>-->
 </body>
 </html>

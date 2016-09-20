@@ -15,18 +15,66 @@ var IIIFComponents;
         SvgDrawComponent.prototype.debug = function () {
             this._emit(SvgDrawComponent.Events.DEBUG, this.options.overlayType);
         };
-        SvgDrawComponent.prototype.paperSetup = function (msg) {
-            $(this._$canvas).css("background-color", "yellow");
+        SvgDrawComponent.prototype.shapeComplete = function (msg) {
+            this._emit(SvgDrawComponent.Events.SHAPECOMPLETE, msg);
+        };
+        SvgDrawComponent.prototype.addToolbar = function () {
+            var _this = this;
+            this._$toolbar = $('<ul/>');
+            this._$tool1 = $('<li><button id="tool1">Lines</button></li>');
+            this._$tool2 = $('<li><button id="tool2">Clouds</button></li>');
+            this._$tool3 = $('<li><button id="tool3">Rect</button></li>');
+            this._$toolbar.append([this._$tool1, this._$tool2, this._$tool3]);
+            this._$element.append(this._$toolbar);
+            $("button").on("click", function (e) {
+                switch (e.target.id) {
+                    case 'tool1':
+                        _this.mypaper.tool1.activate();
+                        break;
+                    case 'tool2':
+                        _this.mypaper.tool2.activate();
+                        break;
+                    case 'tool3':
+                        _this.mypaper.tool3.activate();
+                        break;
+                    default:
+                        _this.mypaper.tool1.activate();
+                }
+            });
+        };
+        SvgDrawComponent.prototype.paperSetup = function (el) {
+            var path, start;
+            var rectangle = null;
+            var _this = this;
             this.mypaper = new paper.PaperScope();
-            this.mypaper.setup(this._$canvas);
+            this.mypaper.setup(el);
+            path = new this.mypaper.Path();
+            function onMouseDown(event) {
+                path.strokeColor = 'red';
+                path.add(event.point);
+            }
             this.mypaper.tool1 = new this.mypaper.Tool();
-            this.path = new this.mypaper.Path();
-            this.path.strokeColor = 'red';
-            this.start = new this.mypaper.Point(100, 100);
-            this.path.moveTo(this.start);
-            this.path.lineTo(this.start.add([200, -50]));
-            this.mypaper.view.draw();
-            this._emit(SvgDrawComponent.Events.PAPERSETUP, msg);
+            this.mypaper.tool1.onMouseDown = onMouseDown;
+            this.mypaper.tool1.onMouseDrag = function (event) {
+                path.add(event.point);
+            };
+            this.mypaper.tool2 = new this.mypaper.Tool();
+            this.mypaper.tool2.minDistance = 20;
+            this.mypaper.tool2.onMouseDown = onMouseDown;
+            this.mypaper.tool2.onMouseDrag = function (event) {
+                path.arcTo(event.point);
+            };
+            this.mypaper.tool3 = new this.mypaper.Tool();
+            this.mypaper.tool3.onMouseDrag = function (event) {
+                if (rectangle) {
+                    rectangle.remove();
+                }
+                drawRect(event.downPoint, event.point);
+            };
+            function drawRect(start, end) {
+                rectangle = new _this.mypaper.Path.Rectangle(start, end);
+                rectangle.strokeColor = 'red';
+            }
         };
         SvgDrawComponent.prototype._init = function () {
             var success = _super.prototype._init.call(this);
@@ -35,15 +83,18 @@ var IIIFComponents;
             }
             switch (this.options.overlayType) {
                 case 'osd':
-                    this._$canvas = $('<canvas id="canvas-1" class="highlight" resize></canvas>');
+                    this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
                     break;
                 case 'img':
-                    this._$canvas = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
+                    this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
                     break;
                 default:
-                    this._$canvas = $('<canvas id="canvas-1" class="paper"></canvas>');
+                    this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
             }
-            this._$element.append(this._$canvas);
+            this._$canvas = this._$wrapper.find('#canvas-1');
+            this._$element.append(this._$wrapper);
+            this.paperSetup(this._$canvas[0]);
+            this.addToolbar();
             return success;
         };
         SvgDrawComponent.prototype._getDefaultOptions = function () {
@@ -65,7 +116,7 @@ var IIIFComponents;
             function Events() {
             }
             Events.DEBUG = 'debug';
-            Events.PAPERSETUP = 'paperSetup';
+            Events.SHAPECOMPLETE = 'shapeComplete';
             return Events;
         }());
         SvgDrawComponent.Events = Events;
