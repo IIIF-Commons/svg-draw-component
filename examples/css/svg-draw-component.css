@@ -21,12 +21,14 @@
   float: left;
 }
 .svg-draw-component .navigator .highlight {
+  width: 100%;
   opacity: 0.4;
   filter: alpha(opacity=40);
   outline: 2px solid #900;
   background-color: #900;
 }
 .svg-draw-component .highlight {
+  width: 100%;
   opacity: 0.4;
   filter: alpha(opacity=40);
   outline: 12px auto #0A7EbE;
