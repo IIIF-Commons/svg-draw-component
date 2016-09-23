@@ -9,6 +9,17 @@
 .svg-draw-component .toolbar {
   width: 800px;
 }
+.svg-draw-component ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  float: right;
+}
+.svg-draw-component li {
+  float: left;
+}
 .svg-draw-component .navigator .highlight {
   opacity: 0.4;
   filter: alpha(opacity=40);

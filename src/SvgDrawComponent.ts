@@ -6,10 +6,8 @@ namespace IIIFComponents {
         public options: ISvgDrawComponentOptions;
         private _$canvas: JQuery;
         private _$wrapper: JQuery;
+        private _$toolbarDiv: JQuery;
         private _$toolbar: JQuery;
-        private _$tool1: JQuery;
-        private _$tool2: JQuery;
-        private _$tool3: JQuery;
         public mypaper: any;
 
         constructor(options: ISvgDrawComponentOptions) {
@@ -34,9 +32,14 @@ namespace IIIFComponents {
                 $('<li><button id="tool2">Clouds</button></li>'),
                 $('<li><button id="tool3">Rect</button></li>')
           ];
+          if (this.options.overlayType === "osd") {
+            tools.push($('<li><button id="drawmode">draw mode (off)</button></li>'));
+          }
+          this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
           this._$toolbar = $('<ul/>');
           this._$toolbar.append(tools);
-          this._$element.append(this._$toolbar);
+          this._$toolbarDiv.append(this._$toolbar);
+          this._$element.after(this._$toolbarDiv);
 
           $( "button" ).on( "click", function(e) {
             switch (e.target.id) {

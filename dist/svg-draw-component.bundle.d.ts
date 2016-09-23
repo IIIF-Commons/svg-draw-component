@@ -49,10 +49,8 @@ declare namespace IIIFComponents {
         options: ISvgDrawComponentOptions;
         private _$canvas;
         private _$wrapper;
+        private _$toolbarDiv;
         private _$toolbar;
-        private _$tool1;
-        private _$tool2;
-        private _$tool3;
         mypaper: any;
         constructor(options: ISvgDrawComponentOptions);
         debug(): void;
