@@ -21,29 +21,97 @@ var IIIFComponents;
         SvgDrawComponent.prototype.debug = function () {
             this._emit(SvgDrawComponent.Events.DEBUG, this.options.overlayType);
         };
-        SvgDrawComponent.prototype.addPoint = function (point) {
-            this._emit(SvgDrawComponent.Events.ADDPOINT, point);
+        SvgDrawComponent.prototype.shapeComplete = function (msg) {
+            this._emit(SvgDrawComponent.Events.SHAPECOMPLETE, msg);
+        };
+        SvgDrawComponent.prototype.addToolbar = function () {
+            var _this = this;
+            var tools = [
+                $('<li><button id="tool1">Lines</button></li>'),
+                $('<li><button id="tool2">Clouds</button></li>'),
+                $('<li><button id="tool3">Rect</button></li>')
+            ];
+            if (this.options.overlayType === "osd") {
+                tools.push($('<li><button id="drawmode">draw mode (off)</button></li>'));
+            }
+            this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
+            this._$toolbar = $('<ul/>');
+            this._$toolbar.append(tools);
+            this._$toolbarDiv.append(this._$toolbar);
+            this._$element.after(this._$toolbarDiv);
+            $("button").on("click", function (e) {
+                switch (e.target.id) {
+                    case 'tool1':
+                        _this.mypaper.tool1.activate();
+                        break;
+                    case 'tool2':
+                        _this.mypaper.tool2.activate();
+                        break;
+                    case 'tool3':
+                        _this.mypaper.tool3.activate();
+                        break;
+                    default:
+                        _this.mypaper.tool1.activate();
+                }
+            });
+        };
+        SvgDrawComponent.prototype.paperSetup = function (el) {
+            var path, start;
+            var rectangle = null;
+            var _this = this;
+            this.mypaper = new paper.PaperScope();
+            this.mypaper.setup(el);
+            path = new this.mypaper.Path();
+            function onMouseDown(event) {
+                path.strokeColor = 'red';
+                path.add(event.point);
+            }
+            ////// S T R A I G H T  L I N E S ////////////
+            this.mypaper.tool1 = new this.mypaper.Tool();
+            this.mypaper.tool1.onMouseDown = onMouseDown;
+            this.mypaper.tool1.onMouseDrag = function (event) {
+                path.add(event.point);
+            };
+            ////// C L O U D Y  L I N E S ////////////
+            this.mypaper.tool2 = new this.mypaper.Tool();
+            this.mypaper.tool2.minDistance = 20;
+            this.mypaper.tool2.onMouseDown = onMouseDown;
+            this.mypaper.tool2.onMouseDrag = function (event) {
+                // Use the arcTo command to draw cloudy lines
+                path.arcTo(event.point);
+            };
+            ////// R E C T A N G L E ////////////
+            this.mypaper.tool3 = new this.mypaper.Tool();
+            this.mypaper.tool3.onMouseDrag = function (event) {
+                if (rectangle) {
+                    rectangle.remove();
+                }
+                drawRect(event.downPoint, event.point);
+            };
+            function drawRect(start, end) {
+                rectangle = new _this.mypaper.Path.Rectangle(start, end);
+                rectangle.strokeColor = 'red';
+            }
         };
         SvgDrawComponent.prototype._init = function () {
             var success = _super.prototype._init.call(this);
             if (!success) {
                 console.error("Component failed to initialise");
             }
-            paper.install(window);
-            // Keep global references to both tools, so the HTML
-            // links below can access them.
-            var tool1, tool2, tool3;
             switch (this.options.overlayType) {
                 case 'osd':
-                    this._$canvas = $('<canvas id="canvas-1" class="highlight" resize></canvas>');
+                    this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
                     break;
                 case 'img':
-                    this._$canvas = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
+                    this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
                     break;
                 default:
-                    this._$canvas = $('<canvas id="canvas-1" class="paper"></canvas>');
+                    this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
             }
-            this._$element.append(this._$canvas);
+            this._$canvas = this._$wrapper.find('#canvas-1');
+            this._$element.append(this._$wrapper);
+            this.paperSetup(this._$canvas[0]);
+            this.addToolbar();
             return success;
         };
         SvgDrawComponent.prototype._getDefaultOptions = function () {
@@ -65,7 +133,7 @@ var IIIFComponents;
             function Events() {
             }
             Events.DEBUG = 'debug';
-            Events.ADDPOINT = 'addPoint';
+            Events.SHAPECOMPLETE = 'shapeComplete';
             return Events;
         }());
         SvgDrawComponent.Events = Events;

@@ -15,124 +15,66 @@
 
     <div id="svgdraw" class="openseadragon"></div>
 
-    <div id="toolbarDiv" class="toolbar">
-        <span style="float:right;margin:10px 20px 0 0;">
-          <a id="drawmode" href="#">draw mode (off)</a> |
-          <a href="#" onclick="tool1.activate();">Lines</a> |
-          <a href="#" onclick="tool2.activate();">Clouds</a> |
-          <a href="#" onclick="tool3.activate();">Rect</a>
-        </span>
-    </div>
-
     <script type="text/javascript">
 
-              var svgdraw;
+          var svgdraw;
 
-              $(function() {
+          $(function() {
 
-                  svgdraw = new IIIFComponents.SvgDrawComponent({
-                      element: "#svgdraw",
-                      overlayType: "osd"
-                  });
-
+              svgdraw = new IIIFComponents.SvgDrawComponent({
+                  element: "#svgdraw",
+                  overlayType: "osd"
               });
 
-              paper.install(window);
-              // Keep global references to both tools, so the HTML
-            	// links below can access them.
-            	var tool1, tool2, tool3;
-
-              $( document ).ready(function() {
+          });
 
 
-                var viewer = OpenSeadragon({
-                    id: "svgdraw",
-                    prefixUrl: "js/openseadragon/images/",
-                    gestureSettingsMouse: { clickToZoom: false },
-                    toolbar: "toolbarDiv",
-                    tileSources:   [{
-                      "@context": "http://iiif.io/api/image/2/context.json",
-                      "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000002.jp2",
-                      "height": 7200,
-                      "width": 5093,
-                      "profile": [ "http://iiif.io/api/image/2/level2.json" ],
-                      "protocol": "http://iiif.io/api/image",
-                      "tiles": [{
-                        "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
-                        "width": 1024
-                      }]
-                    }]
-                });
+          $( document ).ready(function() {
 
-                var element = document.getElementById('canvas-1');
-                var rect = new OpenSeadragon.Rect(0, 0, 1, viewer.viewport.getAspectRatio()+.07);
+            var viewer = OpenSeadragon({
+                id: "svgdraw",
+                prefixUrl: "js/openseadragon/images/",
+                gestureSettingsMouse: { clickToZoom: false },
+                toolbar: "toolbarDiv",
+                tileSources:   [{
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000002.jp2",
+                  "height": 7200,
+                  "width": 5093,
+                  "profile": [ "http://iiif.io/api/image/2/level2.json" ],
+                  "protocol": "http://iiif.io/api/image",
+                  "tiles": [{
+                    "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
+                    "width": 1024
+                  }]
+                }]
+            });
 
-                viewer.addOverlay({
-                    element: element,
-                    location: rect
-                });
 
-                viewer.addHandler("open", function() {
-                  // Get a reference to the canvas object
-              		var canvas = document.getElementById('canvas-1');
-              		// Create an empty project and a view for the canvas:
-              		paper.setup(canvas);
+            viewer.addHandler("open", function() {
+              //hide all until it's loaded
+              var element = document.getElementById('canvas-1');
+              var rect = new OpenSeadragon.Rect(0, 0, 1, viewer.viewport.getAspectRatio()+.07);
 
-                  // Both share the mouseDown event:
+              viewer.addOverlay({
+                  element: element,
+                  location: rect
+              });
 
-              		var path;
-                  var rectangle = null;
-
-              		function onMouseDown(event) {
-              			path = new Path();
-              			path.strokeColor = 'red';
-              			path.add(event.point);
-              		}
-
-                  //////////////////
-              		tool1 = new Tool();
-              		tool1.onMouseDown = onMouseDown;
-
-              		tool1.onMouseDrag = function(event) {
-              			path.add(event.point);
-              		}
-
-                  //////////////////
-              		tool2 = new Tool();
-              		tool2.minDistance = 20;
-              		tool2.onMouseDown = onMouseDown;
-
-              		tool2.onMouseDrag = function(event) {
-              			// Use the arcTo command to draw cloudy lines
-              			path.arcTo(event.point);
-              		}
-
-                  tool3 = new Tool();
-                  tool3.onMouseDrag = function(event) {
-                    if (rectangle) {
-                      rectangle.remove();
-                    }
-                    drawRect(event.downPoint, event.point);
-                  }
-
-                  function drawRect(start, end) {
-                    rectangle = new Path.Rectangle(start, end);
-                    rectangle.strokeColor = 'red';
-                  }
-
-                  $( "#drawmode" ).on( "click", function() {
-                    if (viewer.isMouseNavEnabled() === true) {
-                      viewer.setMouseNavEnabled(false)
-                      $( this ).text('draw mode (on)')
-                    } else {
-                      viewer.setMouseNavEnabled(true)
-                      $( this ).text('draw mode (off)')
-                    }
-                    return false;
-                  });
-                });
+              $( "#drawmode" ).on( "click", function() {
+                if (viewer.isMouseNavEnabled() === true) {
+                  viewer.setMouseNavEnabled(false)
+                  $( this ).text('draw mode (on)')
+                } else {
+                  viewer.setMouseNavEnabled(true)
+                  $( this ).text('draw mode (off)')
+                }
+                return false;
+              });
 
             });
+
+        });
 
 
 
