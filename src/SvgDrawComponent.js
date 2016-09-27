@@ -12,8 +12,32 @@ var IIIFComponents;
             this._init();
             this._resize();
         }
+        SvgDrawComponent.prototype._init = function () {
+            var success = _super.prototype._init.call(this);
+            if (!success) {
+                console.error("Component failed to initialise");
+            }
+            switch (this.options.subjectType.toString()) {
+                case 'openseadragon':
+                    this.subject = new OSDSubject(this.options.subject);
+                    break;
+                case 'image':
+                    this.subject = new ImageSubject(this.options.subject);
+                    break;
+                default:
+                    this.subject = new Subject(this.options.subject);
+            }
+            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this._$canvas = this._$wrapper.find('#canvas-1');
+            this._$element.append(this._$wrapper);
+            this.paperSetup(this._$canvas[0]);
+            this.addToolbar();
+            this.subject.freeze();
+            console.log(this.subject.getSubjectType().toString());
+            return success;
+        };
         SvgDrawComponent.prototype.debug = function () {
-            this._emit(SvgDrawComponent.Events.DEBUG, this.options.overlayType);
+            this._emit(SvgDrawComponent.Events.DEBUG, this.options.subjectType);
         };
         SvgDrawComponent.prototype.shapeComplete = function (msg) {
             this._emit(SvgDrawComponent.Events.SHAPECOMPLETE, msg);
@@ -25,7 +49,7 @@ var IIIFComponents;
                 $('<li><button id="tool2">Clouds</button></li>'),
                 $('<li><button id="tool3">Rect</button></li>')
             ];
-            if (this.options.overlayType === "osd") {
+            if (this.options.subjectType.toString() === "OPENSEADRAGON") {
                 tools.push($('<li><button id="drawmode">draw mode (off)</button></li>'));
             }
             this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
@@ -82,27 +106,6 @@ var IIIFComponents;
                 rectangle = new _this.mypaper.Path.Rectangle(start, end);
                 rectangle.strokeColor = 'red';
             }
-        };
-        SvgDrawComponent.prototype._init = function () {
-            var success = _super.prototype._init.call(this);
-            if (!success) {
-                console.error("Component failed to initialise");
-            }
-            switch (this.options.overlayType) {
-                case 'osd':
-                    this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
-                    break;
-                case 'img':
-                    this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
-                    break;
-                default:
-                    this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
-            }
-            this._$canvas = this._$wrapper.find('#canvas-1');
-            this._$element.append(this._$wrapper);
-            this.paperSetup(this._$canvas[0]);
-            this.addToolbar();
-            return success;
         };
         SvgDrawComponent.prototype._getDefaultOptions = function () {
             return {

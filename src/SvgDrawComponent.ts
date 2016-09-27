@@ -4,6 +4,7 @@ namespace IIIFComponents {
     export class SvgDrawComponent extends _Components.BaseComponent implements ISvgDrawComponent{
 
         public options: ISvgDrawComponentOptions;
+        public subject: ISubject;
         private _$canvas: JQuery;
         private _$wrapper: JQuery;
         private _$toolbarDiv: JQuery;
@@ -17,8 +18,41 @@ namespace IIIFComponents {
             this._resize();
         }
 
+        protected _init(): boolean {
+            var success: boolean = super._init();
+
+            if (!success){
+                console.error("Component failed to initialise");
+            }
+
+
+            switch (this.options.subjectType.toString()) {
+              case 'openseadragon':
+                  this.subject = new OSDSubject(this.options.subject);
+                  //this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
+                  break;
+              case 'image':
+                  this.subject = new ImageSubject(this.options.subject);
+                  //this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
+                  break;
+              default:
+                  this.subject = new Subject(this.options.subject);
+                  //this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            }
+            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+
+            this._$canvas = this._$wrapper.find('#canvas-1');
+            this._$element.append(this._$wrapper);
+            this.paperSetup(this._$canvas[0]);
+            this.addToolbar();
+            this.subject.freeze();
+            console.log(this.subject.getSubjectType().toString());
+
+            return success;
+        }
+
         public debug(): void {
-            this._emit(SvgDrawComponent.Events.DEBUG, this.options.overlayType);
+            this._emit(SvgDrawComponent.Events.DEBUG, this.options.subjectType);
         }
 
         public shapeComplete(msg): void {
@@ -32,7 +66,7 @@ namespace IIIFComponents {
                 $('<li><button id="tool2">Clouds</button></li>'),
                 $('<li><button id="tool3">Rect</button></li>')
           ];
-          if (this.options.overlayType === "osd") {
+          if (this.options.subjectType.toString() === "OPENSEADRAGON") {
             tools.push($('<li><button id="drawmode">draw mode (off)</button></li>'));
           }
           this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
@@ -105,33 +139,6 @@ namespace IIIFComponents {
                 rectangle.strokeColor = 'red';
               }
 
-        }
-
-        protected _init(): boolean {
-            var success: boolean = super._init();
-
-            if (!success){
-                console.error("Component failed to initialise");
-            }
-
-            switch (this.options.overlayType) {
-              case 'osd':
-                  this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
-                  break;
-              case 'img':
-                  this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
-                  break;
-              default:
-                  this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
-            }
-
-
-            this._$canvas = this._$wrapper.find('#canvas-1');
-            this._$element.append(this._$wrapper);
-            this.paperSetup(this._$canvas[0]);
-            this.addToolbar();
-
-            return success;
         }
 
 
