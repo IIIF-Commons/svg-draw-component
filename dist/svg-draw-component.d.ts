@@ -32,11 +32,16 @@ declare namespace IIIFComponents {
     }
 }
 
+declare var OpenSeadragon: any;
+declare var paper: any;
 declare namespace IIIFComponents {
     class OSDSubject implements ISubject {
+        viewer: any;
         constructor(target: any);
         freeze(): void;
         getSubjectType(): SubjectType;
+        private addOverlay();
+        private addTools();
     }
 }
 

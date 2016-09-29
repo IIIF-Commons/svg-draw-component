@@ -35,12 +35,45 @@ var IIIFComponents;
     var OSDSubject = (function () {
         function OSDSubject(target) {
             console.log(target);
+            var _this = this;
+            this.viewer = new OpenSeadragon(target);
+            this.viewer.addHandler("open", function () {
+                _this.addOverlay();
+                _this.addTools();
+            });
         }
         OSDSubject.prototype.freeze = function () {
             console.log("OSD frozen!");
         };
         OSDSubject.prototype.getSubjectType = function () {
             return new IIIFComponents.SubjectType('openseadragon');
+        };
+        OSDSubject.prototype.addOverlay = function () {
+            var element = document.getElementById('canvas-1');
+            var rect = new OpenSeadragon.Rect(0, 0, 1, this.viewer.viewport.getAspectRatio() + .07);
+            this.viewer.addOverlay({
+                element: element,
+                location: rect
+            });
+            paper.view.viewSize.width = $("#canvas-1").width();
+            paper.view.viewSize.height = $("#canvas-1").height();
+        };
+        OSDSubject.prototype.addTools = function () {
+            var _this = this;
+            $(document).ready(function () {
+                $('#toolbar').append($('<li><button id="drawmode">draw mode (off)</button></li>'));
+                $("#drawmode").on("click", function () {
+                    if (_this.viewer.isMouseNavEnabled() === true) {
+                        _this.viewer.setMouseNavEnabled(false);
+                        $(this).text('draw mode (on)');
+                    }
+                    else {
+                        _this.viewer.setMouseNavEnabled(true);
+                        $(this).text('draw mode (off)');
+                    }
+                    return false;
+                });
+            });
         };
         return OSDSubject;
     }());
@@ -174,11 +207,8 @@ var IIIFComponents;
                 $('<li><button id="tool2">Clouds</button></li>'),
                 $('<li><button id="tool3">Rect</button></li>')
             ];
-            if (this.options.subjectType.toString() === "OPENSEADRAGON") {
-                tools.push($('<li><button id="drawmode">draw mode (off)</button></li>'));
-            }
             this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
-            this._$toolbar = $('<ul/>');
+            this._$toolbar = $('<ul id="toolbar"/>');
             this._$toolbar.append(tools);
             this._$toolbarDiv.append(this._$toolbar);
             this._$element.after(this._$toolbarDiv);
