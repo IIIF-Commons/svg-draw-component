@@ -5,10 +5,12 @@ namespace IIIFComponents {
     export class OSDSubject implements ISubject {
 
         public viewer: any;
+        public _$wrapper: JQuery;
 
         constructor(target) {
             console.log(target);
             var _this = this;
+            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
             this.viewer = new OpenSeadragon(target);
 
             this.viewer.addHandler("open", function() {
@@ -19,6 +21,10 @@ namespace IIIFComponents {
 
         public freeze(): void {
           console.log("OSD frozen!");
+        }
+
+        public addBackground(svgDrawPaper): void {
+          console.log("OSD addBackground!");
         }
 
         public getSubjectType(): SubjectType {

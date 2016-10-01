@@ -1,6 +1,8 @@
 // svg-draw-component v1.0.1 https://github.com/sdellis/svg-draw-component#readme
 declare namespace IIIFComponents {
     interface ISubject {
+        _$wrapper: JQuery;
+        addBackground(svgDrawPaper: any): void;
         getSubjectType(): SubjectType;
         freeze(): void;
     }
@@ -24,10 +26,15 @@ declare namespace IIIFComponents {
     }
 }
 
+declare var paper: any;
 declare namespace IIIFComponents {
     class ImageSubject implements ISubject {
+        raster: any;
+        _$wrapper: JQuery;
+        private imgID;
         constructor(target: any);
         freeze(): void;
+        addBackground(svgDrawPaper: any): void;
         getSubjectType(): SubjectType;
     }
 }
@@ -37,8 +44,10 @@ declare var paper: any;
 declare namespace IIIFComponents {
     class OSDSubject implements ISubject {
         viewer: any;
+        _$wrapper: JQuery;
         constructor(target: any);
         freeze(): void;
+        addBackground(svgDrawPaper: any): void;
         getSubjectType(): SubjectType;
         private addOverlay();
         private addTools();
@@ -55,7 +64,9 @@ declare namespace IIIFComponents {
 
 declare namespace IIIFComponents {
     class Subject implements ISubject {
+        _$wrapper: JQuery;
         constructor(target: any);
+        addBackground(svgDrawPaper: any): void;
         freeze(): void;
         getSubjectType(): SubjectType;
     }
@@ -81,7 +92,7 @@ declare namespace IIIFComponents {
         private _$wrapper;
         private _$toolbarDiv;
         private _$toolbar;
-        mypaper: any;
+        svgDrawPaper: any;
         constructor(options: ISvgDrawComponentOptions);
         protected _init(): boolean;
         debug(): void;

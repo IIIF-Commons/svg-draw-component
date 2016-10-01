@@ -9,7 +9,7 @@ namespace IIIFComponents {
         private _$wrapper: JQuery;
         private _$toolbarDiv: JQuery;
         private _$toolbar: JQuery;
-        public mypaper: any;
+        public svgDrawPaper: any;
 
         constructor(options: ISvgDrawComponentOptions) {
             super(options);
@@ -20,33 +20,29 @@ namespace IIIFComponents {
 
         protected _init(): boolean {
             var success: boolean = super._init();
+            var raster;
 
             if (!success){
                 console.error("Component failed to initialise");
             }
 
-
             switch (this.options.subjectType.toString()) {
               case 'openseadragon':
                   this.subject = new OSDSubject(this.options.subject);
-                  //this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
                   break;
               case 'image':
                   this.subject = new ImageSubject(this.options.subject);
-                  //this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
                   break;
               default:
                   this.subject = new Subject(this.options.subject);
-                  //this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
             }
-            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
 
+            this._$wrapper = this.subject._$wrapper;
             this._$canvas = this._$wrapper.find('#canvas-1');
             this._$element.append(this._$wrapper);
+
             this.paperSetup(this._$canvas[0]);
             this.addToolbar();
-            this.subject.freeze();
-            console.log(this.subject.getSubjectType().toString());
 
             return success;
         }
@@ -75,16 +71,16 @@ namespace IIIFComponents {
           $( "button" ).on( "click", function(e) {
             switch (e.target.id) {
               case 'tool1':
-                  _this.mypaper.tool1.activate();
+                  _this.svgDrawPaper.tool1.activate();
                   break;
               case 'tool2':
-                  _this.mypaper.tool2.activate();
+                  _this.svgDrawPaper.tool2.activate();
                   break;
               case 'tool3':
-                  _this.mypaper.tool3.activate();
+                  _this.svgDrawPaper.tool3.activate();
                   break;
               default:
-                  _this.mypaper.tool1.activate();
+                  _this.svgDrawPaper.tool1.activate();
             }
           });
         }
@@ -95,10 +91,12 @@ namespace IIIFComponents {
               var rectangle = null;
               var _this = this;
 
-              this.mypaper = new paper.PaperScope();
-          		this.mypaper.setup(el);
+              this.svgDrawPaper = new paper.PaperScope();
+          		this.svgDrawPaper.setup(el);
 
-              path = new this.mypaper.Path();
+              this.subject.addBackground(this.svgDrawPaper);
+
+              path = new this.svgDrawPaper.Path();
 
               function onMouseDown(event) {
                 path.strokeColor = 'red';
@@ -106,25 +104,25 @@ namespace IIIFComponents {
               }
 
               ////// S T R A I G H T  L I N E S ////////////
-              this.mypaper.tool1 = new this.mypaper.Tool();
-              this.mypaper.tool1.onMouseDown = onMouseDown;
-              this.mypaper.tool1.onMouseDrag = function(event) {
+              this.svgDrawPaper.tool1 = new this.svgDrawPaper.Tool();
+              this.svgDrawPaper.tool1.onMouseDown = onMouseDown;
+              this.svgDrawPaper.tool1.onMouseDrag = function(event) {
                 path.add(event.point);
               }
 
               ////// C L O U D Y  L I N E S ////////////
-              this.mypaper.tool2 = new this.mypaper.Tool();
-              this.mypaper.tool2.minDistance = 20;
-              this.mypaper.tool2.onMouseDown = onMouseDown;
+              this.svgDrawPaper.tool2 = new this.svgDrawPaper.Tool();
+              this.svgDrawPaper.tool2.minDistance = 20;
+              this.svgDrawPaper.tool2.onMouseDown = onMouseDown;
 
-              this.mypaper.tool2.onMouseDrag = function(event) {
+              this.svgDrawPaper.tool2.onMouseDrag = function(event) {
                 // Use the arcTo command to draw cloudy lines
                 path.arcTo(event.point);
               }
 
               ////// R E C T A N G L E ////////////
-              this.mypaper.tool3 = new this.mypaper.Tool();
-              this.mypaper.tool3.onMouseDrag = function(event) {
+              this.svgDrawPaper.tool3 = new this.svgDrawPaper.Tool();
+              this.svgDrawPaper.tool3.onMouseDrag = function(event) {
                 if (rectangle) {
                   rectangle.remove();
                 }
@@ -132,7 +130,7 @@ namespace IIIFComponents {
               }
 
               function drawRect(start, end) {
-                rectangle = new _this.mypaper.Path.Rectangle(start, end);
+                rectangle = new _this.svgDrawPaper.Path.Rectangle(start, end);
                 rectangle.strokeColor = 'red';
               }
 
