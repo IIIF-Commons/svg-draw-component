@@ -349,7 +349,6 @@ var IIIFComponents;
                 drawRect(event.downPoint, event.point);
             };
             this.svgDrawPaper.rectTool.onMouseUp = function (event) {
-                console.log(rectangle);
                 var rectCopy = rectangle.clone();
                 _this.pathComplete({ 'type': 'rect',
                     'data': { 'x': rectangle.bounds.x,
