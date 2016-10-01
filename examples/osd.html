@@ -14,28 +14,18 @@
 <body class="svg-draw-component">
 
     <div id="svgdraw" class="openseadragon"></div>
+    <div id="foo"/>
 
     <script type="text/javascript">
 
-          var svgdraw;
-
-          $(function() {
-
-              svgdraw = new IIIFComponents.SvgDrawComponent({
-                  element: "#svgdraw",
-                  overlayType: "osd"
-              });
-
-          });
-
+          var svgdraw, viewer;
 
           $( document ).ready(function() {
-
-            var viewer = OpenSeadragon({
+            osd_config = {
                 id: "svgdraw",
                 prefixUrl: "js/openseadragon/images/",
+                toolbar: "foo",
                 gestureSettingsMouse: { clickToZoom: false },
-                toolbar: "toolbarDiv",
                 tileSources:   [{
                   "@context": "http://iiif.io/api/image/2/context.json",
                   "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000002.jp2",
@@ -46,37 +36,17 @@
                   "tiles": [{
                     "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
                     "width": 1024
-                  }]
-                }]
-            });
+                      }]
+                    }]
+                };
 
+                svgdraw = new IIIFComponents.SvgDrawComponent({
+                    element: "#svgdraw",
+                    subjectType: "openseadragon",
+                    subject: osd_config
+                });
 
-            viewer.addHandler("open", function() {
-              //hide all until it's loaded
-              var element = document.getElementById('canvas-1');
-              var rect = new OpenSeadragon.Rect(0, 0, 1, viewer.viewport.getAspectRatio()+.07);
-
-              viewer.addOverlay({
-                  element: element,
-                  location: rect
-              });
-
-              $( "#drawmode" ).on( "click", function() {
-                if (viewer.isMouseNavEnabled() === true) {
-                  viewer.setMouseNavEnabled(false)
-                  $( this ).text('draw mode (on)')
-                } else {
-                  viewer.setMouseNavEnabled(true)
-                  $( this ).text('draw mode (off)')
-                }
-                return false;
-              });
-
-            });
-
-        });
-
-
+          });
 
     </script>
 

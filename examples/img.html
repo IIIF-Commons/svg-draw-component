@@ -12,6 +12,7 @@
 <body class="svg-draw-component">
 
     <div id="svgdraw"></div>
+    <img id="subject" style="display:none;" src="img/floorplan.png"/>
 
     <script type="text/javascript">
 
@@ -21,7 +22,8 @@
 
             svgdraw = new IIIFComponents.SvgDrawComponent({
               element: "#svgdraw",
-              overlayType: "img"
+              subjectType: "image",
+              subject: "subject"
             });
 
         });

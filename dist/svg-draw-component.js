@@ -4,6 +4,170 @@
 
 
 
+
+
+
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var ImageSubject = (function () {
+        function ImageSubject(target) {
+            this.imgID = target;
+            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+        }
+        ImageSubject.prototype.freeze = function () {
+            console.log("Image frozen!");
+        };
+        ImageSubject.prototype.addBackground = function (svgDrawPaper) {
+            this.raster = new svgDrawPaper.Raster(this.imgID);
+            svgDrawPaper.view.viewSize.width = this.raster.width;
+            svgDrawPaper.view.viewSize.height = this.raster.height;
+            this.raster.position = svgDrawPaper.view.center;
+        };
+        ImageSubject.prototype.getSubjectType = function () {
+            return new IIIFComponents.SubjectType('image');
+        };
+        return ImageSubject;
+    }());
+    IIIFComponents.ImageSubject = ImageSubject;
+})(IIIFComponents || (IIIFComponents = {}));
+(function (w) {
+    if (!w._Components) {
+        w._Components = _Components;
+    }
+})(window);
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var OSDSubject = (function () {
+        function OSDSubject(target) {
+            console.log(target);
+            var _this = this;
+            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this.viewer = new OpenSeadragon(target);
+            this.viewer.addHandler("open", function () {
+                _this.addOverlay();
+                _this.addTools();
+            });
+        }
+        OSDSubject.prototype.freeze = function () {
+            console.log("OSD frozen!");
+        };
+        OSDSubject.prototype.addBackground = function (svgDrawPaper) {
+            console.log("OSD addBackground!");
+        };
+        OSDSubject.prototype.getSubjectType = function () {
+            return new IIIFComponents.SubjectType('openseadragon');
+        };
+        OSDSubject.prototype.addOverlay = function () {
+            var element = document.getElementById('canvas-1');
+            var rect = new OpenSeadragon.Rect(0, 0, 1, this.viewer.viewport.getAspectRatio() + .07);
+            this.viewer.addOverlay({
+                element: element,
+                location: rect
+            });
+            paper.view.viewSize.width = $("#canvas-1").width();
+            paper.view.viewSize.height = $("#canvas-1").height();
+        };
+        OSDSubject.prototype.addTools = function () {
+            var _this = this;
+            $(document).ready(function () {
+                $('#toolbar').append($('<li><button id="drawmode">draw mode (off)</button></li>'));
+                $("#drawmode").on("click", function () {
+                    if (_this.viewer.isMouseNavEnabled() === true) {
+                        _this.viewer.setMouseNavEnabled(false);
+                        $(this).text('draw mode (on)');
+                    }
+                    else {
+                        _this.viewer.setMouseNavEnabled(true);
+                        $(this).text('draw mode (off)');
+                    }
+                    return false;
+                });
+            });
+        };
+        return OSDSubject;
+    }());
+    IIIFComponents.OSDSubject = OSDSubject;
+})(IIIFComponents || (IIIFComponents = {}));
+(function (w) {
+    if (!w._Components) {
+        w._Components = _Components;
+    }
+})(window);
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var StringValue = (function () {
+        function StringValue(value) {
+            this.value = "";
+            if (value) {
+                this.value = value.toLowerCase();
+            }
+        }
+        StringValue.prototype.toString = function () {
+            return this.value;
+        };
+        return StringValue;
+    }());
+    IIIFComponents.StringValue = StringValue;
+})(IIIFComponents || (IIIFComponents = {}));
+
+var IIIFComponents;
+(function (IIIFComponents) {
+    var Subject = (function () {
+        function Subject(target) {
+            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+        }
+        Subject.prototype.addBackground = function (svgDrawPaper) {
+            console.log("Default addBackground!");
+        };
+        Subject.prototype.freeze = function () {
+            console.log("default frozen!");
+        };
+        Subject.prototype.getSubjectType = function () {
+            return new IIIFComponents.SubjectType('');
+        };
+        return Subject;
+    }());
+    IIIFComponents.Subject = Subject;
+})(IIIFComponents || (IIIFComponents = {}));
+(function (w) {
+    if (!w._Components) {
+        w._Components = _Components;
+    }
+})(window);
+
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var IIIFComponents;
+(function (IIIFComponents) {
+    var SubjectType = (function (_super) {
+        __extends(SubjectType, _super);
+        function SubjectType() {
+            _super.apply(this, arguments);
+        }
+        // todo: use getters when ES3 target is no longer required.
+        SubjectType.prototype.default = function () {
+            return new SubjectType(SubjectType.DEFAULT.toString());
+        };
+        SubjectType.prototype.image = function () {
+            return new SubjectType(SubjectType.IMAGE.toString());
+        };
+        SubjectType.prototype.openseadragon = function () {
+            return new SubjectType(SubjectType.OPENSEADRAGON.toString());
+        };
+        SubjectType.DEFAULT = new SubjectType("");
+        SubjectType.IMAGE = new SubjectType("image");
+        SubjectType.OPENSEADRAGON = new SubjectType("openseadragon");
+        return SubjectType;
+    }(IIIFComponents.StringValue));
+    IIIFComponents.SubjectType = SubjectType;
+})(IIIFComponents || (IIIFComponents = {}));
+
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -18,8 +182,33 @@ var IIIFComponents;
             this._init();
             this._resize();
         }
+        SvgDrawComponent.prototype._init = function () {
+            var success = _super.prototype._init.call(this);
+            var raster;
+            if (!success) {
+                console.error("Component failed to initialise");
+            }
+            switch (this.options.subjectType.toString()) {
+                case 'openseadragon':
+                    this.subject = new IIIFComponents.OSDSubject(this.options.subject);
+                    //this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
+                    break;
+                case 'image':
+                    this.subject = new IIIFComponents.ImageSubject(this.options.subject);
+                    //this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
+                    break;
+                default:
+                    this.subject = new IIIFComponents.Subject(this.options.subject);
+            }
+            this._$wrapper = this.subject._$wrapper;
+            this._$canvas = this._$wrapper.find('#canvas-1');
+            this._$element.append(this._$wrapper);
+            this.paperSetup(this._$canvas[0]);
+            this.addToolbar();
+            return success;
+        };
         SvgDrawComponent.prototype.debug = function () {
-            this._emit(SvgDrawComponent.Events.DEBUG, this.options.overlayType);
+            this._emit(SvgDrawComponent.Events.DEBUG, this.options.subjectType);
         };
         SvgDrawComponent.prototype.shapeComplete = function (msg) {
             this._emit(SvgDrawComponent.Events.SHAPECOMPLETE, msg);
@@ -31,27 +220,24 @@ var IIIFComponents;
                 $('<li><button id="tool2">Clouds</button></li>'),
                 $('<li><button id="tool3">Rect</button></li>')
             ];
-            if (this.options.overlayType === "osd") {
-                tools.push($('<li><button id="drawmode">draw mode (off)</button></li>'));
-            }
             this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
-            this._$toolbar = $('<ul/>');
+            this._$toolbar = $('<ul id="toolbar"/>');
             this._$toolbar.append(tools);
             this._$toolbarDiv.append(this._$toolbar);
             this._$element.after(this._$toolbarDiv);
             $("button").on("click", function (e) {
                 switch (e.target.id) {
                     case 'tool1':
-                        _this.mypaper.tool1.activate();
+                        _this.svgDrawPaper.tool1.activate();
                         break;
                     case 'tool2':
-                        _this.mypaper.tool2.activate();
+                        _this.svgDrawPaper.tool2.activate();
                         break;
                     case 'tool3':
-                        _this.mypaper.tool3.activate();
+                        _this.svgDrawPaper.tool3.activate();
                         break;
                     default:
-                        _this.mypaper.tool1.activate();
+                        _this.svgDrawPaper.tool1.activate();
                 }
             });
         };
@@ -59,60 +245,40 @@ var IIIFComponents;
             var path, start;
             var rectangle = null;
             var _this = this;
-            this.mypaper = new paper.PaperScope();
-            this.mypaper.setup(el);
-            path = new this.mypaper.Path();
+            this.svgDrawPaper = new paper.PaperScope();
+            this.svgDrawPaper.setup(el);
+            this.subject.addBackground(this.svgDrawPaper);
+            path = new this.svgDrawPaper.Path();
             function onMouseDown(event) {
                 path.strokeColor = 'red';
                 path.add(event.point);
             }
             ////// S T R A I G H T  L I N E S ////////////
-            this.mypaper.tool1 = new this.mypaper.Tool();
-            this.mypaper.tool1.onMouseDown = onMouseDown;
-            this.mypaper.tool1.onMouseDrag = function (event) {
+            this.svgDrawPaper.tool1 = new this.svgDrawPaper.Tool();
+            this.svgDrawPaper.tool1.onMouseDown = onMouseDown;
+            this.svgDrawPaper.tool1.onMouseDrag = function (event) {
                 path.add(event.point);
             };
             ////// C L O U D Y  L I N E S ////////////
-            this.mypaper.tool2 = new this.mypaper.Tool();
-            this.mypaper.tool2.minDistance = 20;
-            this.mypaper.tool2.onMouseDown = onMouseDown;
-            this.mypaper.tool2.onMouseDrag = function (event) {
+            this.svgDrawPaper.tool2 = new this.svgDrawPaper.Tool();
+            this.svgDrawPaper.tool2.minDistance = 20;
+            this.svgDrawPaper.tool2.onMouseDown = onMouseDown;
+            this.svgDrawPaper.tool2.onMouseDrag = function (event) {
                 // Use the arcTo command to draw cloudy lines
                 path.arcTo(event.point);
             };
             ////// R E C T A N G L E ////////////
-            this.mypaper.tool3 = new this.mypaper.Tool();
-            this.mypaper.tool3.onMouseDrag = function (event) {
+            this.svgDrawPaper.tool3 = new this.svgDrawPaper.Tool();
+            this.svgDrawPaper.tool3.onMouseDrag = function (event) {
                 if (rectangle) {
                     rectangle.remove();
                 }
                 drawRect(event.downPoint, event.point);
             };
             function drawRect(start, end) {
-                rectangle = new _this.mypaper.Path.Rectangle(start, end);
+                rectangle = new _this.svgDrawPaper.Path.Rectangle(start, end);
                 rectangle.strokeColor = 'red';
             }
-        };
-        SvgDrawComponent.prototype._init = function () {
-            var success = _super.prototype._init.call(this);
-            if (!success) {
-                console.error("Component failed to initialise");
-            }
-            switch (this.options.overlayType) {
-                case 'osd':
-                    this._$wrapper = $('<div><canvas id="canvas-1" class="highlight" resize></canvas></div>');
-                    break;
-                case 'img':
-                    this._$wrapper = $('<div class="outsideWrapper"><div class="insideWrapper"><img src="img/floorplan.png" class="coveredImage"><canvas id="canvas-1" class="coveringCanvas"></canvas></div></div>');
-                    break;
-                default:
-                    this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
-            }
-            this._$canvas = this._$wrapper.find('#canvas-1');
-            this._$element.append(this._$wrapper);
-            this.paperSetup(this._$canvas[0]);
-            this.addToolbar();
-            return success;
         };
         SvgDrawComponent.prototype._getDefaultOptions = function () {
             return {
