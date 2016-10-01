@@ -1,5 +1,6 @@
 namespace IIIFComponents{
     export interface ISvgDrawComponentOptions extends _Components.IBaseComponentOptions {
-      overlayType?: string; // img or osd
+      subjectType?: SubjectType; // none, 'image', or 'openseadragon'
+      subject?: any; // osd instance, img element, canvas element
     }
 }
