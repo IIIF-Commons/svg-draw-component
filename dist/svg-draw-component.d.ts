@@ -93,10 +93,11 @@ declare namespace IIIFComponents {
         private _$toolbarDiv;
         private _$toolbar;
         svgDrawPaper: any;
+        private _hitOptions;
         constructor(options: ISvgDrawComponentOptions);
         protected _init(): boolean;
         debug(): void;
-        shapeComplete(msg: any): void;
+        pathComplete(msg: any): void;
         addToolbar(): void;
         paperSetup(el: any): void;
         protected _getDefaultOptions(): ISvgDrawComponentOptions;
