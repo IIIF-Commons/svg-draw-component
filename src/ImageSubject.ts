@@ -4,12 +4,12 @@ namespace IIIFComponents {
     export class ImageSubject implements ISubject {
 
         public raster: any;
-        public _$wrapper: JQuery;
+        public $wrapper: JQuery;
         private imgID: string;
 
         constructor(target) {
             this.imgID = target;
-            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this.$wrapper = $('<div><canvas id="canvas-1" class="paper" resize="true"></canvas></div>');
         }
 
         public freeze(): void {
@@ -17,21 +17,22 @@ namespace IIIFComponents {
         }
 
         public addBackground(svgDrawPaper): void {
-          this.raster = new svgDrawPaper.Raster(this.imgID);
-          svgDrawPaper.view.viewSize.width = this.raster.width;
-          svgDrawPaper.view.viewSize.height = this.raster.height;
-          this.raster.position = svgDrawPaper.view.center;
+            var _this = this;
+            this.raster = new svgDrawPaper.Raster(this.imgID);
+            this.raster.onLoad = function() {
+                console.log('The image has finished loading.');
+                $('.paper').css('width', _this.raster.width + 'px');
+                $('.paper').css('height', _this.raster.height + 'px');
+                svgDrawPaper.view.viewSize.width = _this.raster.width;
+                svgDrawPaper.view.viewSize.height = _this.raster.height;
+                _this.raster.position = svgDrawPaper.view.center;
+
+            };
         }
 
         public getSubjectType(): SubjectType {
-          return new SubjectType('image');
+          return SubjectType.IMAGE;
         }
 
     }
 }
-
-(function(w) {
-    if (!w._Components){
-        w._Components = _Components;
-    }
-})(window);

@@ -4,13 +4,13 @@ declare var paper: any;
 namespace IIIFComponents {
     export class OSDSubject implements ISubject {
 
-        public viewer: any;
-        public _$wrapper: JQuery;
+        public $wrapper: JQuery;
+        private viewer: any;
 
         constructor(target) {
             console.log(target);
             var _this = this;
-            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this.$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
             this.viewer = new OpenSeadragon(target);
 
             this.viewer.addHandler("open", function() {
@@ -20,28 +20,28 @@ namespace IIIFComponents {
         }
 
         public freeze(): void {
-          console.log("OSD frozen!");
+            console.log("OSD frozen!");
         }
 
         public addBackground(svgDrawPaper): void {
-          console.log("OSD addBackground!");
+            console.log("OSD addBackground!");
         }
 
         public getSubjectType(): SubjectType {
-          return new SubjectType('openseadragon');
+            return SubjectType.OPENSEADRAGON;
         }
 
         private addOverlay(): void {
-          var element = document.getElementById('canvas-1');
-          var rect = new OpenSeadragon.Rect(0, 0, 1, this.viewer.viewport.getAspectRatio()+.07);
+            var element = document.getElementById('canvas-1');
+            var rect = new OpenSeadragon.Rect(0, 0, 1, this.viewer.viewport.getAspectRatio()+.07);
 
-          this.viewer.addOverlay({
-              element: element,
-              location: rect
-          });
+            this.viewer.addOverlay({
+                element: element,
+                location: rect
+            });
 
-          paper.view.viewSize.width = $( "#canvas-1" ).width();
-          paper.view.viewSize.height = $( "#canvas-1" ).height();
+            paper.view.viewSize.width = $( "#canvas-1" ).width();
+            paper.view.viewSize.height = $( "#canvas-1" ).height();
 
         }
 
@@ -64,9 +64,3 @@ namespace IIIFComponents {
 
     }
 }
-
-(function(w) {
-    if (!w._Components){
-        w._Components = _Components;
-    }
-})(window);
