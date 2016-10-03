@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>svg-draw-component</h1>
-    <p>The svg-draw-component allows a user to draw shapes on a HTML5 canvas.
+    <p>The svg-draw-component allows a user to draw SVG shapes on a HTML5 canvas using Paper.js, a canvas-wrapping library.
       Users have the option to overlay the canvas on images, an OpenSeadragon instance,
       or a plain canvas (default).  To try out the component on your own, there are
       three basic steps:
@@ -16,20 +16,21 @@
         <li>Include the bundled svg-draw-component and base-component files
           (along with OpenSeadragon distribution files if using it)</li>
         <li> Add a &lt;div id="svgdraw"&gt; element in the body</li>
+        <li> Optionally add a hidden image element in the body (outside of the svgdraw element) and give it an id.</li>
         <li> Add the following below your svgdraw div
-          <pre>
+          <pre style="padding:20px;background-color:rgba(158, 167, 184, 0.2);">
             &lt;script type="text/javascript"&gt;
+                var svgdraw;
 
-                      var svgdraw;
+                $(function() {
 
-                      $(function() {
+                  svgdraw = new IIIFComponents.SvgDrawComponent({
+                      element: "#svgdraw",
+                      subjectType: "" // other options are "image" or "openseadragon"
+                      subject: "" // other options your imageID or osd config object
+                  });
 
-                          svgdraw = new IIIFComponents.SvgDrawComponent({
-                              element: "#svgdraw",
-                              overlayType: "" // other options are "img" or "osd"
-                          });
-
-                      });
+                });
             &lt;/script&gt;
           </pre>
         </li>
