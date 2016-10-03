@@ -72,20 +72,36 @@ var IIIFComponents;
         };
         OSDSubject.prototype.addTools = function () {
             var _this = this;
-            $(document).ready(function () {
+            $(function () {
                 $('#toolbar').append($('<li><button id="drawmode">draw mode (off)</button></li>'));
-                $("#drawmode").on("click", function () {
+                $('#drawmode').on('click', function (e) {
                     if (_this.viewer.isMouseNavEnabled() === true) {
                         _this.viewer.setMouseNavEnabled(false);
-                        $(this).text('draw mode (on)');
+                        $(e.target).text('draw mode (on)');
                     }
                     else {
                         _this.viewer.setMouseNavEnabled(true);
-                        $(this).text('draw mode (off)');
+                        $(e.target).text('draw mode (off)');
                     }
                     return false;
                 });
             });
+            /*
+              var _this = this;
+              $( document ).ready(function() {
+                $('#toolbar').append($('<li><button id="drawmode">draw mode (off)</button></li>'));
+                $( "#drawmode" ).on( "click", function() {
+                  if (_this.viewer.isMouseNavEnabled() === true) {
+                    _this.viewer.setMouseNavEnabled(false)
+                    $( this ).text('draw mode (on)')
+                  } else {
+                    _this.viewer.setMouseNavEnabled(true)
+                    $( this ).text('draw mode (off)')
+                  }
+                  return false;
+                });
+              });
+              */
         };
         return OSDSubject;
     }());
