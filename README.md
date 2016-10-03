@@ -1,16 +1,16 @@
 # svg-draw-component
 
-OpenSeadragon (deep zoom) example:
+Default, Image Overlay, and OpenSeadragon (deep zoom) examples:
 http://sdellis.com/svg-draw-component/examples/
 
-Basic Image Overlay example:
-http://sdellis.com/svg-draw-component/examples/basic.html
-
+##Get Started
+```
     npm install
 
     gulp
 
     gulp examples
+```
 
 ##Notes
 

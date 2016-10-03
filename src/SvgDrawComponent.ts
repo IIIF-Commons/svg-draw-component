@@ -34,17 +34,17 @@ namespace IIIFComponents {
             }
 
             switch (this.options.subjectType.toString()) {
-              case 'openseadragon':
+              case SubjectType.OPENSEADRAGON.toString():
                   this.subject = new OSDSubject(this.options.subject);
                   break;
-              case 'image':
+              case SubjectType.IMAGE.toString():
                   this.subject = new ImageSubject(this.options.subject);
                   break;
               default:
                   this.subject = new Subject(this.options.subject);
             }
 
-            this._$wrapper = this.subject._$wrapper;
+            this._$wrapper = this.subject.$wrapper;
             this._$canvas = this._$wrapper.find('#canvas-1');
             this._$element.append(this._$wrapper);
 
@@ -76,7 +76,7 @@ namespace IIIFComponents {
           this._$toolbarDiv.append(this._$toolbar);
           this._$element.after(this._$toolbarDiv);
 
-          $( "button" ).on( "click", function(e) {
+          $('button').on( 'click', function(e) {
             switch (e.target.id) {
               case 'selectTool':
                   _this.svgDrawPaper.selectTool.activate();
@@ -97,14 +97,14 @@ namespace IIIFComponents {
         }
 
 
-        public paperSetup(el): void {
+        public paperSetup(el: HTMLElement): void {
               var path, segment, line, cloud, start
               var rectangle = null;
               var movePath = false;
               var _this = this;
 
               this.svgDrawPaper = new paper.PaperScope();
-          		this.svgDrawPaper.setup(el);
+          	  this.svgDrawPaper.setup(el);
 
               this.subject.addBackground(this.svgDrawPaper);
               //todo: add bg to separate layer, move to back, and lock it
@@ -227,10 +227,10 @@ namespace IIIFComponents {
 
         }
 
-
         protected _getDefaultOptions(): ISvgDrawComponentOptions {
             return <ISvgDrawComponentOptions>{
-              overlayType: 'img',
+                subject: {},
+                subjectType: SubjectType.DEFAULT.toString(),
             }
         }
 

@@ -1,10 +1,10 @@
 namespace IIIFComponents {
     export class Subject implements ISubject {
 
-        public _$wrapper: JQuery;
+        public $wrapper: JQuery;
 
         constructor(target) {
-            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this.$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
         }
 
         public addBackground(svgDrawPaper): void {
@@ -21,9 +21,3 @@ namespace IIIFComponents {
 
     }
 }
-
-(function(w) {
-    if (!w._Components){
-        w._Components = _Components;
-    }
-})(window);

@@ -13,29 +13,30 @@ var IIIFComponents;
     var ImageSubject = (function () {
         function ImageSubject(target) {
             this.imgID = target;
-            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this.$wrapper = $('<div><canvas id="canvas-1" class="paper" resize="true"></canvas></div>');
         }
         ImageSubject.prototype.freeze = function () {
             console.log("Image frozen!");
         };
         ImageSubject.prototype.addBackground = function (svgDrawPaper) {
+            var _this = this;
             this.raster = new svgDrawPaper.Raster(this.imgID);
-            svgDrawPaper.view.viewSize.width = this.raster.width;
-            svgDrawPaper.view.viewSize.height = this.raster.height;
-            this.raster.position = svgDrawPaper.view.center;
+            this.raster.onLoad = function () {
+                console.log('The image has finished loading.');
+                $('.paper').css('width', _this.raster.width + 'px');
+                $('.paper').css('height', _this.raster.height + 'px');
+                svgDrawPaper.view.viewSize.width = _this.raster.width;
+                svgDrawPaper.view.viewSize.height = _this.raster.height;
+                _this.raster.position = svgDrawPaper.view.center;
+            };
         };
         ImageSubject.prototype.getSubjectType = function () {
-            return new IIIFComponents.SubjectType('image');
+            return IIIFComponents.SubjectType.IMAGE;
         };
         return ImageSubject;
     }());
     IIIFComponents.ImageSubject = ImageSubject;
 })(IIIFComponents || (IIIFComponents = {}));
-(function (w) {
-    if (!w._Components) {
-        w._Components = _Components;
-    }
-})(window);
 
 var IIIFComponents;
 (function (IIIFComponents) {
@@ -43,7 +44,7 @@ var IIIFComponents;
         function OSDSubject(target) {
             console.log(target);
             var _this = this;
-            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this.$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
             this.viewer = new OpenSeadragon(target);
             this.viewer.addHandler("open", function () {
                 _this.addOverlay();
@@ -57,7 +58,7 @@ var IIIFComponents;
             console.log("OSD addBackground!");
         };
         OSDSubject.prototype.getSubjectType = function () {
-            return new IIIFComponents.SubjectType('openseadragon');
+            return IIIFComponents.SubjectType.OPENSEADRAGON;
         };
         OSDSubject.prototype.addOverlay = function () {
             var element = document.getElementById('canvas-1');
@@ -71,16 +72,16 @@ var IIIFComponents;
         };
         OSDSubject.prototype.addTools = function () {
             var _this = this;
-            $(document).ready(function () {
+            $(function () {
                 $('#toolbar').append($('<li><button id="drawmode">draw mode (off)</button></li>'));
-                $("#drawmode").on("click", function () {
+                $('#drawmode').on('click', function (e) {
                     if (_this.viewer.isMouseNavEnabled() === true) {
                         _this.viewer.setMouseNavEnabled(false);
-                        $(this).text('draw mode (on)');
+                        $(e.target).text('draw mode (on)');
                     }
                     else {
                         _this.viewer.setMouseNavEnabled(true);
-                        $(this).text('draw mode (off)');
+                        $(e.target).text('draw mode (off)');
                     }
                     return false;
                 });
@@ -90,11 +91,6 @@ var IIIFComponents;
     }());
     IIIFComponents.OSDSubject = OSDSubject;
 })(IIIFComponents || (IIIFComponents = {}));
-(function (w) {
-    if (!w._Components) {
-        w._Components = _Components;
-    }
-})(window);
 
 var IIIFComponents;
 (function (IIIFComponents) {
@@ -117,7 +113,7 @@ var IIIFComponents;
 (function (IIIFComponents) {
     var Subject = (function () {
         function Subject(target) {
-            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this.$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
         }
         Subject.prototype.addBackground = function (svgDrawPaper) {
             console.log("Default addBackground!");
@@ -132,11 +128,6 @@ var IIIFComponents;
     }());
     IIIFComponents.Subject = Subject;
 })(IIIFComponents || (IIIFComponents = {}));
-(function (w) {
-    if (!w._Components) {
-        w._Components = _Components;
-    }
-})(window);
 
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -150,16 +141,6 @@ var IIIFComponents;
         function SubjectType() {
             _super.apply(this, arguments);
         }
-        // todo: use getters when ES3 target is no longer required.
-        SubjectType.prototype.default = function () {
-            return new SubjectType(SubjectType.DEFAULT.toString());
-        };
-        SubjectType.prototype.image = function () {
-            return new SubjectType(SubjectType.IMAGE.toString());
-        };
-        SubjectType.prototype.openseadragon = function () {
-            return new SubjectType(SubjectType.OPENSEADRAGON.toString());
-        };
         SubjectType.DEFAULT = new SubjectType("");
         SubjectType.IMAGE = new SubjectType("image");
         SubjectType.OPENSEADRAGON = new SubjectType("openseadragon");
@@ -195,16 +176,16 @@ var IIIFComponents;
                 console.error("Component failed to initialise");
             }
             switch (this.options.subjectType.toString()) {
-                case 'openseadragon':
+                case IIIFComponents.SubjectType.OPENSEADRAGON.toString():
                     this.subject = new IIIFComponents.OSDSubject(this.options.subject);
                     break;
-                case 'image':
+                case IIIFComponents.SubjectType.IMAGE.toString():
                     this.subject = new IIIFComponents.ImageSubject(this.options.subject);
                     break;
                 default:
                     this.subject = new IIIFComponents.Subject(this.options.subject);
             }
-            this._$wrapper = this.subject._$wrapper;
+            this._$wrapper = this.subject.$wrapper;
             this._$canvas = this._$wrapper.find('#canvas-1');
             this._$element.append(this._$wrapper);
             this.paperSetup(this._$canvas[0]);
@@ -230,7 +211,7 @@ var IIIFComponents;
             this._$toolbar.append(tools);
             this._$toolbarDiv.append(this._$toolbar);
             this._$element.after(this._$toolbarDiv);
-            $("button").on("click", function (e) {
+            $('button').on('click', function (e) {
                 switch (e.target.id) {
                     case 'selectTool':
                         _this.svgDrawPaper.selectTool.activate();
@@ -368,7 +349,8 @@ var IIIFComponents;
         };
         SvgDrawComponent.prototype._getDefaultOptions = function () {
             return {
-                overlayType: 'img'
+                subject: {},
+                subjectType: IIIFComponents.SubjectType.DEFAULT.toString()
             };
         };
         SvgDrawComponent.prototype._resize = function () {

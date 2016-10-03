@@ -25,16 +25,16 @@ var IIIFComponents;
                 console.error("Component failed to initialise");
             }
             switch (this.options.subjectType.toString()) {
-                case 'openseadragon':
+                case SubjectType.OPENSEADRAGON.toString():
                     this.subject = new OSDSubject(this.options.subject);
                     break;
-                case 'image':
+                case SubjectType.IMAGE.toString():
                     this.subject = new ImageSubject(this.options.subject);
                     break;
                 default:
                     this.subject = new Subject(this.options.subject);
             }
-            this._$wrapper = this.subject._$wrapper;
+            this._$wrapper = this.subject.$wrapper;
             this._$canvas = this._$wrapper.find('#canvas-1');
             this._$element.append(this._$wrapper);
             this.paperSetup(this._$canvas[0]);
@@ -60,7 +60,7 @@ var IIIFComponents;
             this._$toolbar.append(tools);
             this._$toolbarDiv.append(this._$toolbar);
             this._$element.after(this._$toolbarDiv);
-            $("button").on("click", function (e) {
+            $('button').on('click', function (e) {
                 switch (e.target.id) {
                     case 'selectTool':
                         _this.svgDrawPaper.selectTool.activate();
@@ -190,7 +190,8 @@ var IIIFComponents;
         };
         SvgDrawComponent.prototype._getDefaultOptions = function () {
             return {
-                overlayType: 'img',
+                subject: {},
+                subjectType: SubjectType.DEFAULT.toString(),
             };
         };
         SvgDrawComponent.prototype._resize = function () {
