@@ -32,9 +32,22 @@ declare namespace _Components {
 }
 
 // custom definitions go in here
+declare var paper: any;
+declare namespace IIIFComponents {
+    class ImageSubject implements ISubject {
+        raster: any;
+        $wrapper: JQuery;
+        private imgID;
+        constructor(target: any);
+        freeze(): void;
+        addBackground(svgDrawPaper: any): void;
+        getSubjectType(): SubjectType;
+    }
+}
+
 declare namespace IIIFComponents {
     interface ISubject {
-        _$wrapper: JQuery;
+        $wrapper: JQuery;
         addBackground(svgDrawPaper: any): void;
         getSubjectType(): SubjectType;
         freeze(): void;
@@ -54,21 +67,8 @@ declare namespace IIIFComponents {
 
 declare namespace IIIFComponents {
     interface ISvgDrawComponentOptions extends _Components.IBaseComponentOptions {
-        subjectType?: SubjectType;
+        subjectType?: string;
         subject?: any;
-    }
-}
-
-declare var paper: any;
-declare namespace IIIFComponents {
-    class ImageSubject implements ISubject {
-        raster: any;
-        _$wrapper: JQuery;
-        private imgID;
-        constructor(target: any);
-        freeze(): void;
-        addBackground(svgDrawPaper: any): void;
-        getSubjectType(): SubjectType;
     }
 }
 
@@ -77,7 +77,7 @@ declare var paper: any;
 declare namespace IIIFComponents {
     class OSDSubject implements ISubject {
         viewer: any;
-        _$wrapper: JQuery;
+        $wrapper: JQuery;
         constructor(target: any);
         freeze(): void;
         addBackground(svgDrawPaper: any): void;
@@ -97,7 +97,7 @@ declare namespace IIIFComponents {
 
 declare namespace IIIFComponents {
     class Subject implements ISubject {
-        _$wrapper: JQuery;
+        $wrapper: JQuery;
         constructor(target: any);
         addBackground(svgDrawPaper: any): void;
         freeze(): void;
@@ -110,9 +110,6 @@ declare namespace IIIFComponents {
         static DEFAULT: SubjectType;
         static IMAGE: SubjectType;
         static OPENSEADRAGON: SubjectType;
-        default(): SubjectType;
-        image(): SubjectType;
-        openseadragon(): SubjectType;
     }
 }
 
@@ -131,7 +128,7 @@ declare namespace IIIFComponents {
         debug(): void;
         shapeComplete(msg: any): void;
         addToolbar(): void;
-        paperSetup(el: any): void;
+        paperSetup(el: HTMLElement): void;
         protected _getDefaultOptions(): ISvgDrawComponentOptions;
         protected _resize(): void;
     }

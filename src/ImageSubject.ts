@@ -4,12 +4,12 @@ namespace IIIFComponents {
     export class ImageSubject implements ISubject {
 
         public raster: any;
-        public _$wrapper: JQuery;
+        public $wrapper: JQuery;
         private imgID: string;
 
         constructor(target) {
             this.imgID = target;
-            this._$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
+            this.$wrapper = $('<div><canvas id="canvas-1" class="paper"></canvas></div>');
         }
 
         public freeze(): void {
@@ -24,14 +24,8 @@ namespace IIIFComponents {
         }
 
         public getSubjectType(): SubjectType {
-          return new SubjectType('image');
+          return SubjectType.IMAGE;
         }
 
     }
 }
-
-(function(w) {
-    if (!w._Components){
-        w._Components = _Components;
-    }
-})(window);
