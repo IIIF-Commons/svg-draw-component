@@ -27,18 +27,18 @@ namespace IIIFComponents {
             }
 
             switch (this.options.subjectType.toString()) {
-              case 'openseadragon':
+              case SubjectType.OPENSEADRAGON.toString():
                   this.subject = new OSDSubject(this.options.subject);
                   break;
-              case 'image':
+              case SubjectType.IMAGE.toString():
                   this.subject = new ImageSubject(this.options.subject);
                   break;
               default:
                   this.subject = new Subject(this.options.subject);
             }
 
-            this._$wrapper = this.subject._$wrapper;
-            this._$canvas = this._$wrapper.find('#canvas-1');
+            this._$wrapper = this.subject.$wrapper;
+            this._$canvas = this._$wrapper.find('#canvas-1'); // todo: should this id be hard-coded?
             this._$element.append(this._$wrapper);
 
             this.paperSetup(this._$canvas[0]);
@@ -68,7 +68,7 @@ namespace IIIFComponents {
           this._$toolbarDiv.append(this._$toolbar);
           this._$element.after(this._$toolbarDiv);
 
-          $( "button" ).on( "click", function(e) {
+          $('button').on('click', function(e) {
             switch (e.target.id) {
               case 'tool1':
                   _this.svgDrawPaper.tool1.activate();
@@ -86,60 +86,59 @@ namespace IIIFComponents {
         }
 
 
-        public paperSetup(el): void {
-              var path, start
-              var rectangle = null;
-              var _this = this;
+        public paperSetup(el: HTMLElement): void {
+            var path, start; // todo: would be good to type these
+            var rectangle = null;
 
-              this.svgDrawPaper = new paper.PaperScope();
-          		this.svgDrawPaper.setup(el);
+            this.svgDrawPaper = new paper.PaperScope();
+          	this.svgDrawPaper.setup(el);
 
-              this.subject.addBackground(this.svgDrawPaper);
+            this.subject.addBackground(this.svgDrawPaper);
 
-              path = new this.svgDrawPaper.Path();
+            path = new this.svgDrawPaper.Path();
 
-              function onMouseDown(event) {
+            function onMouseDown(event) {
                 path.strokeColor = 'red';
                 path.add(event.point);
-              }
+            }
 
-              ////// S T R A I G H T  L I N E S ////////////
-              this.svgDrawPaper.tool1 = new this.svgDrawPaper.Tool();
-              this.svgDrawPaper.tool1.onMouseDown = onMouseDown;
-              this.svgDrawPaper.tool1.onMouseDrag = function(event) {
+            ////// S T R A I G H T  L I N E S ////////////
+            this.svgDrawPaper.tool1 = new this.svgDrawPaper.Tool();
+            this.svgDrawPaper.tool1.onMouseDown = onMouseDown;
+            this.svgDrawPaper.tool1.onMouseDrag = function(event) {
                 path.add(event.point);
-              }
+            }
 
-              ////// C L O U D Y  L I N E S ////////////
-              this.svgDrawPaper.tool2 = new this.svgDrawPaper.Tool();
-              this.svgDrawPaper.tool2.minDistance = 20;
-              this.svgDrawPaper.tool2.onMouseDown = onMouseDown;
+            ////// C L O U D Y  L I N E S ////////////
+            this.svgDrawPaper.tool2 = new this.svgDrawPaper.Tool();
+            this.svgDrawPaper.tool2.minDistance = 20;
+            this.svgDrawPaper.tool2.onMouseDown = onMouseDown;
 
-              this.svgDrawPaper.tool2.onMouseDrag = function(event) {
+            this.svgDrawPaper.tool2.onMouseDrag = function(event) {
                 // Use the arcTo command to draw cloudy lines
                 path.arcTo(event.point);
-              }
+            }
 
-              ////// R E C T A N G L E ////////////
-              this.svgDrawPaper.tool3 = new this.svgDrawPaper.Tool();
-              this.svgDrawPaper.tool3.onMouseDrag = function(event) {
+            ////// R E C T A N G L E ////////////
+            this.svgDrawPaper.tool3 = new this.svgDrawPaper.Tool();
+            this.svgDrawPaper.tool3.onMouseDrag = function(event) {
                 if (rectangle) {
-                  rectangle.remove();
+                    rectangle.remove();
                 }
                 drawRect(event.downPoint, event.point);
-              }
+            }
 
-              function drawRect(start, end) {
-                rectangle = new _this.svgDrawPaper.Path.Rectangle(start, end);
+            function drawRect(start, end) {
+                rectangle = new this.svgDrawPaper.Path.Rectangle(start, end);
                 rectangle.strokeColor = 'red';
-              }
+            }
 
         }
 
-
         protected _getDefaultOptions(): ISvgDrawComponentOptions {
             return <ISvgDrawComponentOptions>{
-              overlayType: 'img',
+                subject: {},
+                subjectType: SubjectType.IMAGE.toString(),
             }
         }
 
