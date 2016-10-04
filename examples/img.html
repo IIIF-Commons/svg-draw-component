@@ -14,6 +14,9 @@
     <div id="svgdraw"></div>
 
     <img id="subject" style="display:none;" src="img/floorplan.png"/>
+    <button id="loadSVG">loadSVG</button>
+
+    <div class="event-set" style="margin-top:50px;"/>
 
     <script type="text/javascript">
 
@@ -27,24 +30,39 @@
               subject: "subject"
             });
 
+            function displayEvents(eventName, args){
+                $( ".event-set" ).empty();
+                var events = $( '<div class="events"/>' );
+                events.append("<h2>" + eventName + "</h2>");
+                var pre = $( "<pre/>" );
+                pre.text(JSON.stringify(args, undefined, 2));
+                events.append(pre);
+                $( ".event-set" ).append(events);
+                $( ".events" ).addClass( "events-flash" );
+            };
+
             svgdraw.on('shapeCompleted', function(args) {
-                console.log("shapeCompleted!");
-                console.log(args);
+                displayEvents('shapeCompleted',args);
             });
 
             svgdraw.on('shapeUpdated', function(args) {
-                console.log("shapeUpdated!");
-                console.log(args);
+                displayEvents('shapeUpdated',args);
             });
 
             svgdraw.on('shapeDeleted', function(args) {
-                console.log("shapeDeleted!");
-                console.log(args);
+                displayEvents('shapeDeleted',args);
             });
 
             svgdraw.on('svgLoaded', function(args) {
-                //console.log("SVG Loaded: " + args);
+                displayEvents('svgLoaded',args);
             });
+
+            function loadSVG(){
+                svgdraw.importSVG('<svg xmlns="http://www.w3.org/2000/svg"><rect x="506" y="284" width="71" height="103" fill="#ffffff" fill-rule="nonzero" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" opacity="0.5" style="mix-blend-mode: normal"></rect></svg>');
+                return false;
+            }
+
+            $( "#loadSVG" ).on( "click", loadSVG );
 
         });
 

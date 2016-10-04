@@ -280,8 +280,7 @@ var IIIFComponents;
             });
         };
         SvgDrawComponent.prototype.importSVG = function (svg) {
-            this.svgDrawPaper.project.activeLayer.importSVG(svg);
-            //this.svgDrawPaper.project.activeLayer.importSVG(svg,this._emit(SvgDrawComponent.Events.SVGLOADED, true));
+            this.svgDrawPaper.project.activeLayer.importSVG(svg, this._emit(SvgDrawComponent.Events.SVGLOADED, true));
         };
         SvgDrawComponent.prototype.paperSetup = function (el) {
             var path, point, line, cloud, rectangle;
