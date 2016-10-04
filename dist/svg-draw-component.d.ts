@@ -85,6 +85,7 @@ declare namespace IIIFComponents {
     class SvgDrawComponent extends _Components.BaseComponent implements ISvgDrawComponent {
         options: ISvgDrawComponentOptions;
         subject: ISubject;
+        importSVG(svg: any): void;
         private _$canvas;
         private _$wrapper;
         private _$toolbarDiv;
@@ -109,5 +110,6 @@ declare namespace IIIFComponents.SvgDrawComponent {
         static SHAPECOMPLETED: string;
         static SHAPEUPDATED: string;
         static SHAPEDELETED: string;
+        static SVGLOADED: string;
     }
 }

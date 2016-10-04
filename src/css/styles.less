@@ -51,22 +51,6 @@ li {
       background-color: transparent;
   }
 
-  // for image overlays
-  .outsideWrapper{
-      /*width:636px; height:494px;*/
-      margin:20px 60px;
-      border:1px solid blue;}
-  .insideWrapper{
-      width:100%; height:100%;
-      position:relative;}
-  .coveredImage{
-      width:100%; height:100%;
-      position:absolute; top:0px; left:0px;
-  }
-  .coveringCanvas{
-      width:100%; height:100%;
-      position:absolute; top:0px; left:0px;
-  }
 
   // for plain canvas
   .paper{
@@ -74,5 +58,60 @@ li {
         /*margin:20px 60px; img/floorplan.png*/
         border:1px solid blue;
         background-color: rgba(158, 167, 184, 0.2);}
+
+  // for demos
+  .events {
+      width: 600px;
+      min-height: 200px;
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 4px;
+      -webkit-transition: background-color .2s linear;
+      -moz-transition: background-color .2s linear;
+      -o-transition: background-color .2s linear;
+      -ms-transition: background-color .2s linear;
+      transition: background-color .2s linear;
+      clear: both;
+    }
+
+    .events-flash {
+        background-color: #eee;
+        -webkit-animation-name: demo;
+        -webkit-animation-duration: 900ms;
+        -webkit-animation-iteration-count: 1;
+        -webkit-animation-timing-function: ease-out;
+        animation-name: demo;
+        animation-duration: 900ms;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-out;
+    }
+
+    pre {
+        word-wrap: break-word;
+    }
+
+    @-webkit-keyframes demo {
+      0% {
+          background-color: #eee;
+      }
+      25% {
+          background-color: Yellow;
+      }
+      100% {
+          background-color: #eee;
+      }
+    }
+
+            @keyframes demo {
+      0% {
+          background-color: #eee;
+      }
+      25% {
+          background-color: Yellow;
+      }
+      100% {
+          background-color: #eee;
+      }
+    }
 
 }

@@ -5,6 +5,7 @@ namespace IIIFComponents {
 
         public options: ISvgDrawComponentOptions;
         public subject: ISubject;
+        public importSVG(svg): void;
         private _$canvas: JQuery;
         private _$wrapper: JQuery;
         private _$toolbarDiv: JQuery;
@@ -115,6 +116,7 @@ namespace IIIFComponents {
           var _this = this;
           var tools = [
                 $('<li><button id="selectTool">Select</button></li>'),
+                $('<li><button id="pointTool">Points</button></li>'),
                 $('<li><button id="lineTool">Lines</button></li>'),
                 $('<li><button id="cloudTool">Clouds</button></li>'),
                 $('<li><button id="rectTool">Rect</button></li>')
@@ -129,6 +131,9 @@ namespace IIIFComponents {
             switch (e.target.id) {
               case 'selectTool':
                   _this.svgDrawPaper.selectTool.activate();
+                  break;
+              case 'pointTool':
+                  _this.svgDrawPaper.pointTool.activate();
                   break;
               case 'lineTool':
                   _this.svgDrawPaper.lineTool.activate();
@@ -145,11 +150,13 @@ namespace IIIFComponents {
           });
         }
 
+        public importSVG(svg): void {
+            this.svgDrawPaper.project.activeLayer.importSVG(svg,this._emit(SvgDrawComponent.Events.SVGLOADED, true));
+        }
 
         public paperSetup(el: HTMLElement): void {
-              var path, line, cloud, start;
+              var path, point, line, cloud, rectangle;
               var dragging = false;
-              var rectangle = null;
               var _this = this;
 
               this.svgDrawPaper = new paper.PaperScope();
@@ -199,6 +206,22 @@ namespace IIIFComponents {
                         }
                         return false;
                     }
+                }
+
+                ////// P O I N T S ////////////
+                this.svgDrawPaper.pointTool = new this.svgDrawPaper.Tool();
+
+                this.svgDrawPaper.pointTool.onMouseDown = function(event) {
+                  point = new _this.svgDrawPaper.Path.Circle(event.point, 10);
+                  point.strokeColor = 'red';
+                  point.fillColor = 'white';
+                  point.opacity = 0.5;
+                }
+
+                this.svgDrawPaper.pointTool.onMouseUp = function(event) {
+                  var pointCopy = point.clone();
+                  _this.pathCompleted(pointCopy); // fire event
+                  point.remove();
                 }
 
               ////// S T R A I G H T  L I N E S ////////////
@@ -286,6 +309,7 @@ namespace IIIFComponents.SvgDrawComponent {
         static SHAPECOMPLETED: string = 'shapeCompleted';
         static SHAPEUPDATED: string = 'shapeUpdated';
         static SHAPEDELETED: string = 'shapeDeleted';
+        static SVGLOADED: string = 'svgLoaded';
     }
 }
 

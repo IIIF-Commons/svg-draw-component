@@ -247,6 +247,7 @@ var IIIFComponents;
             var _this = this;
             var tools = [
                 $('<li><button id="selectTool">Select</button></li>'),
+                $('<li><button id="pointTool">Points</button></li>'),
                 $('<li><button id="lineTool">Lines</button></li>'),
                 $('<li><button id="cloudTool">Clouds</button></li>'),
                 $('<li><button id="rectTool">Rect</button></li>')
@@ -260,6 +261,9 @@ var IIIFComponents;
                 switch (e.target.id) {
                     case 'selectTool':
                         _this.svgDrawPaper.selectTool.activate();
+                        break;
+                    case 'pointTool':
+                        _this.svgDrawPaper.pointTool.activate();
                         break;
                     case 'lineTool':
                         _this.svgDrawPaper.lineTool.activate();
@@ -275,10 +279,12 @@ var IIIFComponents;
                 }
             });
         };
+        SvgDrawComponent.prototype.importSVG = function (svg) {
+            this.svgDrawPaper.project.activeLayer.importSVG(svg, this._emit(SvgDrawComponent.Events.SVGLOADED, true));
+        };
         SvgDrawComponent.prototype.paperSetup = function (el) {
-            var path, line, cloud, start;
+            var path, point, line, cloud, rectangle;
             var dragging = false;
-            var rectangle = null;
             var _this = this;
             this.svgDrawPaper = new paper.PaperScope();
             this.svgDrawPaper.setup(el);
@@ -318,6 +324,19 @@ var IIIFComponents;
                     }
                     return false;
                 }
+            };
+            ////// P O I N T S ////////////
+            this.svgDrawPaper.pointTool = new this.svgDrawPaper.Tool();
+            this.svgDrawPaper.pointTool.onMouseDown = function (event) {
+                point = new _this.svgDrawPaper.Path.Circle(event.point, 10);
+                point.strokeColor = 'red';
+                point.fillColor = 'white';
+                point.opacity = 0.5;
+            };
+            this.svgDrawPaper.pointTool.onMouseUp = function (event) {
+                var pointCopy = point.clone();
+                _this.pathCompleted(pointCopy); // fire event
+                point.remove();
             };
             ////// S T R A I G H T  L I N E S ////////////
             this.svgDrawPaper.lineTool = new this.svgDrawPaper.Tool();
@@ -402,6 +421,7 @@ var IIIFComponents;
             Events.SHAPECOMPLETED = 'shapeCompleted';
             Events.SHAPEUPDATED = 'shapeUpdated';
             Events.SHAPEDELETED = 'shapeDeleted';
+            Events.SVGLOADED = 'svgLoaded';
             return Events;
         }());
         SvgDrawComponent.Events = Events;
