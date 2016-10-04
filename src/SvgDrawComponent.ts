@@ -10,7 +10,6 @@ namespace IIIFComponents {
         private _$toolbarDiv: JQuery;
         private _$toolbar: JQuery;
         public svgDrawPaper: any;
-        public segment: any;
         private _hitOptions: any;
 
         constructor(options: ISvgDrawComponentOptions) {
@@ -60,8 +59,56 @@ namespace IIIFComponents {
             this._emit(SvgDrawComponent.Events.DEBUG, this.options.subjectType);
         }
 
-        public pathComplete(msg): void {
-            this._emit(SvgDrawComponent.Events.SHAPECOMPLETE, msg);
+        public pathCompleted(shape): void {
+            var payload = {}
+            var media_fragment_coords = null;
+            var $svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
+            var $shape = $( shape.exportSVG({matchShapes:true}) );
+            $svg.append($shape);
+            shape.name = $shape[0].tagName + "_" + shape._id;
+            if($shape[0].tagName === 'rect' && shape.rotation === 0){ // if a non-rotated rectangle
+                media_fragment_coords = {
+                    'x': shape.bounds.x,
+                    'y': shape.bounds.y,
+                    'h': shape.bounds.height,
+                    'w': shape.bounds.width
+                 }
+            }
+            payload = {
+                  'name': shape.name,
+                  'media_fragment_coords':media_fragment_coords,
+                  'svg': $svg[0].outerHTML
+              }
+
+            this._emit(SvgDrawComponent.Events.SHAPECOMPLETED, payload);
+        }
+
+        public pathUpdated(shape): void {
+            var payload = {}
+            var media_fragment_coords = null;
+            var $svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
+            var $shape = $( shape.exportSVG({matchShapes:true}) );
+            $svg.append($shape);
+            if($shape[0].tagName === 'rect' && shape.rotation === 0){ // if a non-rotated rectangle
+                media_fragment_coords = {
+                    'x': shape.bounds.x,
+                    'y': shape.bounds.y,
+                    'h': shape.bounds.height,
+                    'w': shape.bounds.width
+                 }
+            }
+            payload = {
+                  'name': shape.name,
+                  'media_fragment_coords':media_fragment_coords,
+                  'svg': $svg[0].outerHTML
+              }
+
+            this._emit(SvgDrawComponent.Events.SHAPEUPDATED, payload);
+        }
+
+        public pathDeleted(shape): void {
+            var payload = { 'name': shape.name };
+            this._emit(SvgDrawComponent.Events.SHAPEDELETED, payload);
         }
 
         public addToolbar(): void {
@@ -100,9 +147,9 @@ namespace IIIFComponents {
 
 
         public paperSetup(el: HTMLElement): void {
-              var path, segment, line, cloud, start;
+              var path, line, cloud, start;
+              var dragging = false;
               var rectangle = null;
-              var movePath = false;
               var _this = this;
 
               this.svgDrawPaper = new paper.PaperScope();
@@ -123,8 +170,18 @@ namespace IIIFComponents {
 
               this.svgDrawPaper.selectTool.onMouseDrag = function(event) {
                   if (event.item){
+                      dragging = true;
                       event.item.position.x +=event.delta.x;
                       event.item.position.y +=event.delta.y;
+                  }
+              }
+
+              this.svgDrawPaper.selectTool.onMouseUp = function(event) {
+                  if (event.item){
+                      if(dragging){
+                         dragging = false;
+                         _this.pathUpdated(event.item); // fire update event
+                      }
                   }
               }
 
@@ -136,9 +193,10 @@ namespace IIIFComponents {
 
                         for (var i = 0; i < selected.length; i++) {
                         	var item = selected[i];
+                            // todo: allow other components to confirm delete?
+                            _this.pathDeleted(item); // fire delete event
                         	item.remove();
                         }
-                        // todo: emit _this.itemRemoved() event
                         return false;
                     }
                 }
@@ -159,8 +217,7 @@ namespace IIIFComponents {
                 line.closed = true;
                 line.simplify();
                 var lineCopy = line.clone();
-
-                // todo: emit _this.pathComplete() event
+                _this.pathCompleted(lineCopy); // fire event
                 line.remove();
               }
 
@@ -181,7 +238,7 @@ namespace IIIFComponents {
               this.svgDrawPaper.cloudTool.onMouseUp = function(event) {
                 cloud.closed = true;
                 var cloudCopy = cloud.clone();
-                // todo: emit _this.pathComplete() event
+                _this.pathCompleted(cloudCopy); // fire event
                 cloud.remove();
               }
 
@@ -196,14 +253,7 @@ namespace IIIFComponents {
 
               this.svgDrawPaper.rectTool.onMouseUp = function(event) {
                 var rectCopy = rectangle.clone();
-                _this.pathComplete(
-                  {'type':'rect',
-                   'data':{'x':rectangle.bounds.x,
-                          'y': rectangle.bounds.y,
-                          'h': rectangle.bounds.height,
-                          'w': rectangle.bounds.width}
-                  }
-                );
+                _this.pathCompleted(rectCopy);
                 rectangle.remove();
               }
 
@@ -233,7 +283,9 @@ namespace IIIFComponents {
 namespace IIIFComponents.SvgDrawComponent {
     export class Events {
         static DEBUG: string = 'debug';
-        static SHAPECOMPLETE: string = 'shapeComplete';
+        static SHAPECOMPLETED: string = 'shapeCompleted';
+        static SHAPEUPDATED: string = 'shapeUpdated';
+        static SHAPEDELETED: string = 'shapeDeleted';
     }
 }
 

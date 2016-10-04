@@ -26,7 +26,6 @@ namespace IIIFComponents {
                 svgDrawPaper.view.viewSize.width = _this.raster.width;
                 svgDrawPaper.view.viewSize.height = _this.raster.height;
                 _this.raster.position = svgDrawPaper.view.center;
-
             };
         }
 
