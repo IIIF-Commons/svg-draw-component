@@ -26,8 +26,19 @@
               subjectType: "image",
               subject: "subject"
             });
-            // <img id="subject" style="display:none;" src="https://s3.amazonaws.com/omeka-net/18547/archive/files/6ba89354c52be0877a54f7c037b41289.jpg?AWSAccessKeyId=AKIAI3ATG3OSQLO5HGKA&Expires=1475552701&Signature=e6ae9CIThGw36TNVtz8ETn%2Bf6OE%3D"/>
-            svgdraw.on('shapeComplete', function(args) {
+
+            svgdraw.on('shapeCompleted', function(args) {
+                console.log("shapeCompleted!");
+                console.log(args);
+            });
+
+            svgdraw.on('shapeUpdated', function(args) {
+                console.log("shapeUpdated!");
+                console.log(args);
+            });
+
+            svgdraw.on('shapeDeleted', function(args) {
+                console.log("shapeDeleted!");
                 console.log(args);
             });
 

@@ -90,12 +90,13 @@ declare namespace IIIFComponents {
         private _$toolbarDiv;
         private _$toolbar;
         svgDrawPaper: any;
-        segment: any;
         private _hitOptions;
         constructor(options: ISvgDrawComponentOptions);
         protected _init(): boolean;
         debug(): void;
-        pathComplete(msg: any): void;
+        pathCompleted(shape: any): void;
+        pathUpdated(shape: any): void;
+        pathDeleted(shape: any): void;
         addToolbar(): void;
         paperSetup(el: HTMLElement): void;
         protected _getDefaultOptions(): ISvgDrawComponentOptions;
@@ -105,6 +106,8 @@ declare namespace IIIFComponents {
 declare namespace IIIFComponents.SvgDrawComponent {
     class Events {
         static DEBUG: string;
-        static SHAPECOMPLETE: string;
+        static SHAPECOMPLETED: string;
+        static SHAPEUPDATED: string;
+        static SHAPEDELETED: string;
     }
 }
