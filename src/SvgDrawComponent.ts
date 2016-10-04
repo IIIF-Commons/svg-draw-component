@@ -128,6 +128,21 @@ namespace IIIFComponents {
                   }
               }
 
+              this.svgDrawPaper.selectTool.onKeyUp = function(event) {
+
+                    if (event.key == 'backspace') {
+
+                        var selected = _this.svgDrawPaper.project.selectedItems;
+
+                        for (var i = 0; i < selected.length; i++) {
+                        	var item = selected[i];
+                        	item.remove();
+                        }
+                        // todo: emit _this.itemRemoved() event
+                        return false;
+                    }
+                }
+
               ////// S T R A I G H T  L I N E S ////////////
               this.svgDrawPaper.lineTool = new this.svgDrawPaper.Tool();
               this.svgDrawPaper.lineTool.onMouseDown = function(event) {
