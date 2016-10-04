@@ -5,6 +5,7 @@ namespace IIIFComponents {
 
         public options: ISvgDrawComponentOptions;
         public subject: ISubject;
+        public importSVG(svg): void;
         private _$canvas: JQuery;
         private _$wrapper: JQuery;
         private _$toolbarDiv: JQuery;
@@ -149,6 +150,9 @@ namespace IIIFComponents {
           });
         }
 
+        public importSVG(svg): void {
+            this.svgDrawPaper.project.activeLayer.importSVG(svg,this._emit(SvgDrawComponent.Events.SVGLOADED, true));
+        }
 
         public paperSetup(el: HTMLElement): void {
               var path, point, line, cloud, rectangle;
@@ -305,6 +309,7 @@ namespace IIIFComponents.SvgDrawComponent {
         static SHAPECOMPLETED: string = 'shapeCompleted';
         static SHAPEUPDATED: string = 'shapeUpdated';
         static SHAPEDELETED: string = 'shapeDeleted';
+        static SVGLOADED: string = 'svgLoaded';
     }
 }
 
