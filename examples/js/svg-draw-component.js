@@ -242,45 +242,6 @@ var IIIFComponents;
             //todo: add bg to separate layer, move to back, and lock it
             ////// S E L E C T   T O O L ////////////
             this.svgDrawPaper.selectTool = new this.svgDrawPaper.Tool();
-            /*
-            this.svgDrawPaper.selectTool.onMouseDown = function(event) {
-
-              segment = path = null;
-
-              var hitResult = _this.svgDrawPaper.project.hitTest(event.point, _this._hitOptions);
-              if (!hitResult){
-                  return;
-              }
-
-              if (event.modifiers.shift) {
-                  if (hitResult.type == 'segment') {
-                      hitResult.segment.remove();
-                  };
-                  return;
-              }
-
-              if (hitResult) {
-                  path = hitResult.item;
-                  if (hitResult.type == 'segment') {
-                      if (event.item){
-                          console.log('event.item.position = ' + event.item.position);
-                      }
-                      segment = hitResult.segment;
-                      //console.log(segment.point);
-                  } else if (hitResult.type == 'stroke') {
-                      var location = hitResult.location;
-                      segment = path.insert(location.index + 1, event.point);
-                      path.smooth();
-                  }
-              }
-
-              movePath = hitResult.type == 'fill';
-              if (movePath){
-                  console.log(hitResult.item);
-                  _this.svgDrawPaper.project.activeLayer.addChild(hitResult.item);
-              }
-            }
-            */
             this.svgDrawPaper.selectTool.onMouseDown = function (event) {
                 _this.svgDrawPaper.project.activeLayer.selected = false;
                 if (event.item) {
@@ -288,8 +249,10 @@ var IIIFComponents;
                 }
             };
             this.svgDrawPaper.selectTool.onMouseDrag = function (event) {
-                event.item.position.x += event.delta.x;
-                event.item.position.y += event.delta.y;
+                if (event.item) {
+                    event.item.position.x += event.delta.x;
+                    event.item.position.y += event.delta.y;
+                }
             };
             ////// S T R A I G H T  L I N E S ////////////
             this.svgDrawPaper.lineTool = new this.svgDrawPaper.Tool();
@@ -305,9 +268,8 @@ var IIIFComponents;
             };
             this.svgDrawPaper.lineTool.onMouseUp = function (event) {
                 line.closed = true;
-                //line.smooth();
+                line.simplify();
                 var lineCopy = line.clone();
-                lineCopy.smooth();
                 // todo: emit _this.pathComplete() event
                 line.remove();
             };

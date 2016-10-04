@@ -122,8 +122,10 @@ namespace IIIFComponents {
               }
 
               this.svgDrawPaper.selectTool.onMouseDrag = function(event) {
-                  event.item.position.x +=event.delta.x;
-                  event.item.position.y +=event.delta.y;
+                  if (event.item){
+                      event.item.position.x +=event.delta.x;
+                      event.item.position.y +=event.delta.y;
+                  }
               }
 
               ////// S T R A I G H T  L I N E S ////////////
@@ -140,9 +142,9 @@ namespace IIIFComponents {
               }
               this.svgDrawPaper.lineTool.onMouseUp = function(event) {
                 line.closed = true;
-                //line.smooth();
+                line.simplify();
                 var lineCopy = line.clone();
-                lineCopy.smooth();
+
                 // todo: emit _this.pathComplete() event
                 line.remove();
               }

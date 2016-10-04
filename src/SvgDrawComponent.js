@@ -96,8 +96,10 @@ var IIIFComponents;
                 }
             };
             this.svgDrawPaper.selectTool.onMouseDrag = function (event) {
-                event.item.position.x += event.delta.x;
-                event.item.position.y += event.delta.y;
+                if (event.item) {
+                    event.item.position.x += event.delta.x;
+                    event.item.position.y += event.delta.y;
+                }
             };
             this.svgDrawPaper.lineTool = new this.svgDrawPaper.Tool();
             this.svgDrawPaper.lineTool.onMouseDown = function (event) {
@@ -112,8 +114,8 @@ var IIIFComponents;
             };
             this.svgDrawPaper.lineTool.onMouseUp = function (event) {
                 line.closed = true;
+                line.simplify();
                 var lineCopy = line.clone();
-                lineCopy.smooth();
                 line.remove();
             };
             this.svgDrawPaper.cloudTool = new this.svgDrawPaper.Tool();
