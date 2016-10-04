@@ -123,6 +123,7 @@ declare namespace IIIFComponents {
         private _$toolbarDiv;
         private _$toolbar;
         svgDrawPaper: any;
+        segment: any;
         private _hitOptions;
         constructor(options: ISvgDrawComponentOptions);
         protected _init(): boolean;

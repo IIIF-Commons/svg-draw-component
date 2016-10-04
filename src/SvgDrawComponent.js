@@ -15,7 +15,8 @@ var IIIFComponents;
                 segments: true,
                 stroke: true,
                 fill: true,
-                tolerance: 5
+                tolerance: 5,
+                class: paper.Path
             };
         }
         SvgDrawComponent.prototype._init = function () {
@@ -89,44 +90,25 @@ var IIIFComponents;
             this.subject.addBackground(this.svgDrawPaper);
             this.svgDrawPaper.selectTool = new this.svgDrawPaper.Tool();
             this.svgDrawPaper.selectTool.onMouseDown = function (event) {
-                segment = path = null;
-                var hitResult = _this.svgDrawPaper.project.hitTest(event.point, _this._hitOptions);
-                if (!hitResult)
-                    return;
-                if (event.modifiers.shift) {
-                    if (hitResult.type == 'segment') {
-                        hitResult.segment.remove();
-                    }
-                    ;
-                    return;
-                }
-                if (hitResult) {
-                    path = hitResult.item;
-                    if (hitResult.type == 'segment') {
-                        segment = hitResult.segment;
-                    }
-                    else if (hitResult.type == 'stroke') {
-                        var location = hitResult.location;
-                        segment = path.insert(location.index + 1, event.point);
-                        path.smooth();
-                    }
-                }
-                movePath = hitResult.type == 'fill';
-                if (movePath)
-                    _this.svgDrawPaper.project.activeLayer.addChild(hitResult.item);
-            };
-            this.svgDrawPaper.selectTool.onMouseMove = function (event) {
                 _this.svgDrawPaper.project.activeLayer.selected = false;
-                if (event.item)
+                if (event.item) {
                     event.item.selected = true;
+                }
             };
             this.svgDrawPaper.selectTool.onMouseDrag = function (event) {
-                if (segment) {
-                    segment.point += event.delta;
-                    path.smooth();
+                if (event.item) {
+                    event.item.position.x += event.delta.x;
+                    event.item.position.y += event.delta.y;
                 }
-                else if (path) {
-                    path.position += event.delta;
+            };
+            this.svgDrawPaper.selectTool.onKeyUp = function (event) {
+                if (event.key == 'backspace') {
+                    var selected = _this.svgDrawPaper.project.selectedItems;
+                    for (var i = 0; i < selected.length; i++) {
+                        var item = selected[i];
+                        item.remove();
+                    }
+                    return false;
                 }
             };
             this.svgDrawPaper.lineTool = new this.svgDrawPaper.Tool();
@@ -142,7 +124,7 @@ var IIIFComponents;
             };
             this.svgDrawPaper.lineTool.onMouseUp = function (event) {
                 line.closed = true;
-                line.smooth();
+                line.simplify();
                 var lineCopy = line.clone();
                 line.remove();
             };
