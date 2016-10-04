@@ -279,6 +279,10 @@ var IIIFComponents;
                 }
             });
         };
+        SvgDrawComponent.prototype.importSVG = function (svg) {
+            this.svgDrawPaper.project.activeLayer.importSVG(svg);
+            //this.svgDrawPaper.project.activeLayer.importSVG(svg,this._emit(SvgDrawComponent.Events.SVGLOADED, true));
+        };
         SvgDrawComponent.prototype.paperSetup = function (el) {
             var path, point, line, cloud, rectangle;
             var dragging = false;
@@ -418,6 +422,7 @@ var IIIFComponents;
             Events.SHAPECOMPLETED = 'shapeCompleted';
             Events.SHAPEUPDATED = 'shapeUpdated';
             Events.SHAPEDELETED = 'shapeDeleted';
+            Events.SVGLOADED = 'svgLoaded';
             return Events;
         }());
         SvgDrawComponent.Events = Events;
