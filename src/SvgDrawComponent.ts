@@ -163,6 +163,12 @@ namespace IIIFComponents {
           	  this.svgDrawPaper.setup(el);
 
               this.subject.addBackground(this.svgDrawPaper);
+              this.svgDrawPaper.project.activeLayer.name = 'bg';
+              var bgLayer = this.svgDrawPaper.project.activeLayer;
+              bgLayer.locked = true;
+              var drawLayer = new this.svgDrawPaper.Layer();
+              drawLayer.name = 'drawlayer';
+
               //todo: add bg to separate layer, move to back, and lock it
 
               ////// S E L E C T   T O O L ////////////
