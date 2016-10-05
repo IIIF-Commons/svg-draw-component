@@ -12,8 +12,8 @@ var IIIFComponents;
             this._init();
             this._resize();
             this._hitOptions = {
-                segments: true,
-                stroke: true,
+                segments: false,
+                stroke: false,
                 fill: true,
                 tolerance: 5,
                 class: paper.Path
@@ -95,7 +95,6 @@ var IIIFComponents;
         SvgDrawComponent.prototype.addToolbar = function () {
             var _this = this;
             var tools = [
-                $('<li><button id="selectTool">Select</button></li>'),
                 $('<li><button id="pointTool">Points</button></li>'),
                 $('<li><button id="lineTool">Lines</button></li>'),
                 $('<li><button id="cloudTool">Clouds</button></li>'),
@@ -180,6 +179,8 @@ var IIIFComponents;
             };
             this.svgDrawPaper.pointTool.onMouseUp = function (event) {
                 var pointCopy = point.clone();
+                pointCopy.selected = true;
+                _this.svgDrawPaper.selectTool.activate();
                 _this.pathCompleted(pointCopy);
                 point.remove();
             };
@@ -198,6 +199,8 @@ var IIIFComponents;
                 line.closed = true;
                 line.simplify();
                 var lineCopy = line.clone();
+                lineCopy.selected = true;
+                _this.svgDrawPaper.selectTool.activate();
                 _this.pathCompleted(lineCopy);
                 line.remove();
             };
@@ -216,6 +219,8 @@ var IIIFComponents;
             this.svgDrawPaper.cloudTool.onMouseUp = function (event) {
                 cloud.closed = true;
                 var cloudCopy = cloud.clone();
+                cloudCopy.selected = true;
+                _this.svgDrawPaper.selectTool.activate();
                 _this.pathCompleted(cloudCopy);
                 cloud.remove();
             };
@@ -228,6 +233,8 @@ var IIIFComponents;
             };
             this.svgDrawPaper.rectTool.onMouseUp = function (event) {
                 var rectCopy = rectangle.clone();
+                rectCopy.selected = true;
+                _this.svgDrawPaper.selectTool.activate();
                 _this.pathCompleted(rectCopy);
                 rectangle.remove();
             };
