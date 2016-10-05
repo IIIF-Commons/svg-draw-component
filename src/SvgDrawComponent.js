@@ -137,6 +137,11 @@ var IIIFComponents;
             this.svgDrawPaper = new paper.PaperScope();
             this.svgDrawPaper.setup(el);
             this.subject.addBackground(this.svgDrawPaper);
+            this.svgDrawPaper.project.activeLayer.name = 'bg';
+            var bgLayer = this.svgDrawPaper.project.activeLayer;
+            bgLayer.locked = true;
+            var drawLayer = new this.svgDrawPaper.Layer();
+            drawLayer.name = 'drawlayer';
             this.svgDrawPaper.selectTool = new this.svgDrawPaper.Tool();
             this.svgDrawPaper.selectTool.onMouseDown = function (event) {
                 _this.svgDrawPaper.project.activeLayer.selected = false;
