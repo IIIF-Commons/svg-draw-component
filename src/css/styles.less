@@ -9,24 +9,7 @@
       border:     1px solid black;
       color:      #333; /* text color for messages */
       background-color: black;
-  }
-
-  .toolbar
-  {
-    width: 800px;
-  }
-
-ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #333;
-      float: right;
-  }
-
-li {
-      float: left;
+      margin-left: 5vw;
   }
 
   .navigator .highlight{
@@ -52,12 +35,95 @@ li {
   }
 
 
-  // for plain canvas
+// for plain canvas
   .paper{
         width:800px; height:600px;
         /*margin:20px 60px; img/floorplan.png*/
+        margin-left: 5vw;
         border:1px solid blue;
         background-color: rgba(158, 167, 184, 0.2);}
+
+// for toolbar
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    @color-b: #889;
+    @color-d1: darken(@color-b, 10%);
+    @color-d2: darken(@color-b, 25%);
+    @color-d3: darken(@color-b, 40%);
+
+    @color-l1: lighten(@color-b, 10%);
+    @color-l2: lighten(@color-b, 25%);
+    @color-l3: lighten(@color-b, 40%);
+
+    @unit: 8px;
+
+    .pressable(@off, @on) {
+
+      > label {
+        position: relative;
+
+        display: inline-block;
+        box-sizing: border-box;
+        border: 1px solid @color-d2;
+        font-size: @unit * 3 / 2;
+        border-radius: @unit / 4;
+        padding: @unit;
+        color: @color-l2;
+
+        background-color: @off;
+        box-shadow:
+          1px 1px 3px 1px rgba(0,0,0,0.2),
+          inset 1px 1px 1px rgba(255,255,255,0.3),
+          inset -1px -1px 1px rgba(0,0,0,0.3);
+
+        transition: background-color 125ms;
+      }
+
+      > input[type=radio] {
+        position: absolute;
+        font-size: 0;
+        left: -100%;
+      }
+
+      > input[type=radio]:checked + label {
+        background-color: @on;
+        box-shadow:
+          inset 1px 1px 1px rgba(0,0,0,0.3);
+      }
+
+      > input[type=radio]:focus + label {
+        box-shadow: 0 0 15px 1px #3498db;
+      }
+    }
+
+    .tools {
+      position: absolute;
+      top: 10vh;
+      left: 0;
+      background-color: @color-b;
+      border: 1px solid @color-d1;
+      border-left: 0;
+
+      > li {
+        margin: @unit @unit;
+      }
+
+      > li.separator {
+        margin: @unit @unit / 2;
+        border-top: 1px solid @color-d1;
+        border-bottom: 1px solid @color-l1;
+      }
+    }
+
+    .tool-btn {
+      .pressable(@color-b, @color-d2);
+    }
+
 
   // for demos
   .events {

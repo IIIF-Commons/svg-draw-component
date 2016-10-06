@@ -247,17 +247,19 @@ var IIIFComponents;
             var _this = this;
             var tools = [
                 //$('<li><button id="selectTool">Select</button></li>'),
-                $('<li><button id="pointTool">Points</button></li>'),
-                $('<li><button id="lineTool">Lines</button></li>'),
-                $('<li><button id="cloudTool">Clouds</button></li>'),
-                $('<li><button id="rectTool">Rect</button></li>')
+                $('<li class="tool-btn"><input id="pointTool" type="radio" name="toolbar" checked><label for="pointTool"><i class="fa fa-fw fa-map-pin"></i></label></li>'),
+                $('<li class="tool-btn"><input id="lineTool" type="radio" name="toolbar" checked><label for="lineTool"><i class="fa fa-fw fa-pencil"></i></label></li>'),
+                $('<li class="tool-btn"><input id="cloudTool" type="radio" name="toolbar" checked><label for="cloudTool"><i class="fa fa-fw fa-cloud"></i></label></li>'),
+                $('<li class="tool-btn"><input id="rectTool" type="radio" name="toolbar" checked><label for="rectTool"><i class="fa fa-fw fa-pencil-square"></i></label></li>'),
+                $('<li class="separator"></li>'),
+                $('<li class="tool-btn"><input id="selectTool" type="radio" name="toolbar" checked><label for="selectTool"><i class="fa fa-fw fa-arrows"></i></label></li>'),
             ];
             this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
-            this._$toolbar = $('<ul id="toolbar"/>');
+            this._$toolbar = $('<ul class="tools">');
             this._$toolbar.append(tools);
             this._$toolbarDiv.append(this._$toolbar);
             this._$element.after(this._$toolbarDiv);
-            $('button').on('click', function (e) {
+            $('input').on('click', function (e) {
                 switch (e.target.id) {
                     case 'selectTool':
                         _this.svgDrawPaper.selectTool.activate();
@@ -356,7 +358,7 @@ var IIIFComponents;
             this.svgDrawPaper.pointTool.onMouseUp = function (event) {
                 var pointCopy = point.clone();
                 pointCopy.selected = true;
-                _this.svgDrawPaper.selectTool.activate();
+                //_this.svgDrawPaper.selectTool.activate();
                 _this.pathCompleted(pointCopy); // fire event
                 point.remove();
             };
@@ -377,7 +379,7 @@ var IIIFComponents;
                 line.simplify();
                 var lineCopy = line.clone();
                 lineCopy.selected = true;
-                _this.svgDrawPaper.selectTool.activate();
+                //_this.svgDrawPaper.selectTool.activate();
                 _this.pathCompleted(lineCopy); // fire event
                 line.remove();
             };
@@ -399,7 +401,7 @@ var IIIFComponents;
                 cloud.closed = true;
                 var cloudCopy = cloud.clone();
                 cloudCopy.selected = true;
-                _this.svgDrawPaper.selectTool.activate();
+                //_this.svgDrawPaper.selectTool.activate();
                 _this.pathCompleted(cloudCopy); // fire event
                 cloud.remove();
             };
@@ -414,7 +416,7 @@ var IIIFComponents;
             this.svgDrawPaper.rectTool.onMouseUp = function (event) {
                 var rectCopy = rectangle.clone();
                 rectCopy.selected = true;
-                _this.svgDrawPaper.selectTool.activate();
+                //_this.svgDrawPaper.selectTool.activate();
                 _this.pathCompleted(rectCopy);
                 rectangle.remove();
             };

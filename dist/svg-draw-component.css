@@ -5,20 +5,7 @@
   color: #333;
   /* text color for messages */
   background-color: black;
-}
-.svg-draw-component .toolbar {
-  width: 800px;
-}
-.svg-draw-component ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-  float: right;
-}
-.svg-draw-component li {
-  float: left;
+  margin-left: 5vw;
 }
 .svg-draw-component .navigator .highlight {
   width: 100%;
@@ -44,8 +31,55 @@
   width: 800px;
   height: 600px;
   /*margin:20px 60px; img/floorplan.png*/
+  margin-left: 5vw;
   border: 1px solid blue;
   background-color: rgba(158, 167, 184, 0.2);
+}
+.svg-draw-component ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.svg-draw-component .tools {
+  position: absolute;
+  top: 10vh;
+  left: 0;
+  background-color: #889;
+  border: 1px solid #6e6e80;
+  border-left: 0;
+}
+.svg-draw-component .tools > li {
+  margin: 8px 8px;
+}
+.svg-draw-component .tools > li.separator {
+  margin: 8px 4px;
+  border-top: 1px solid #6e6e80;
+  border-bottom: 1px solid #a3a3b1;
+}
+.svg-draw-component .tool-btn > label {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px solid #4b4b57;
+  font-size: 12px;
+  border-radius: 2px;
+  padding: 8px;
+  color: #cdcdd4;
+  background-color: #889;
+  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2), inset 1px 1px 1px rgba(255, 255, 255, 0.3), inset -1px -1px 1px rgba(0, 0, 0, 0.3);
+  transition: background-color 125ms;
+}
+.svg-draw-component .tool-btn > input[type=radio] {
+  position: absolute;
+  font-size: 0;
+  left: -100%;
+}
+.svg-draw-component .tool-btn > input[type=radio]:checked + label {
+  background-color: #4b4b57;
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+.svg-draw-component .tool-btn > input[type=radio]:focus + label {
+  box-shadow: 0 0 15px 1px #3498db;
 }
 .svg-draw-component .events {
   width: 600px;
