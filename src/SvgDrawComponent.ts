@@ -154,6 +154,24 @@ namespace IIIFComponents {
             this.svgDrawPaper.project.activeLayer.importSVG(svg,this._emit(SvgDrawComponent.Events.SVGLOADED, true));
         }
 
+        public layers(name?: string): any {
+            if (name)
+                return this.svgDrawPaper.project.layers[name];
+            else
+                return this.svgDrawPaper.project.layers;
+        }
+
+        public addLayer(name?: string): any {
+            var layer;
+            if (name){
+                layer = new this.svgDrawPaper.Layer({ 'name': name });
+            }else{
+                layer = new this.svgDrawPaper.Layer();
+            }
+            return layer;
+        }
+
+
         public paperSetup(el: HTMLElement): void {
               var path, point, line, cloud, rectangle;
               var dragging = false;
@@ -168,8 +186,6 @@ namespace IIIFComponents {
               bgLayer.locked = true;
               var drawLayer = new this.svgDrawPaper.Layer();
               drawLayer.name = 'drawlayer';
-
-              //todo: add bg to separate layer, move to back, and lock it
 
               ////// S E L E C T   T O O L ////////////
               this.svgDrawPaper.selectTool = new this.svgDrawPaper.Tool();

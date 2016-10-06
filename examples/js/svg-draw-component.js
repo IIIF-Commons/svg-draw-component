@@ -282,6 +282,22 @@ var IIIFComponents;
         SvgDrawComponent.prototype.importSVG = function (svg) {
             this.svgDrawPaper.project.activeLayer.importSVG(svg, this._emit(SvgDrawComponent.Events.SVGLOADED, true));
         };
+        SvgDrawComponent.prototype.layers = function (name) {
+            if (name)
+                return this.svgDrawPaper.project.layers[name];
+            else
+                return this.svgDrawPaper.project.layers;
+        };
+        SvgDrawComponent.prototype.addLayer = function (name) {
+            var layer;
+            if (name) {
+                layer = new this.svgDrawPaper.Layer({ 'name': name });
+            }
+            else {
+                layer = new this.svgDrawPaper.Layer();
+            }
+            return layer;
+        };
         SvgDrawComponent.prototype.paperSetup = function (el) {
             var path, point, line, cloud, rectangle;
             var dragging = false;
@@ -294,7 +310,6 @@ var IIIFComponents;
             bgLayer.locked = true;
             var drawLayer = new this.svgDrawPaper.Layer();
             drawLayer.name = 'drawlayer';
-            //todo: add bg to separate layer, move to back, and lock it
             ////// S E L E C T   T O O L ////////////
             this.svgDrawPaper.selectTool = new this.svgDrawPaper.Tool();
             this.svgDrawPaper.selectTool.onMouseDown = function (event) {
