@@ -99,6 +99,8 @@ declare namespace IIIFComponents {
         pathUpdated(shape: any): void;
         pathDeleted(shape: any): void;
         addToolbar(): void;
+        layers(name?: string): any;
+        addLayer(name?: string): any;
         paperSetup(el: HTMLElement): void;
         protected _getDefaultOptions(): ISvgDrawComponentOptions;
         protected _resize(): void;
