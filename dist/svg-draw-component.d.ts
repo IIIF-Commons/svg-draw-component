@@ -89,6 +89,7 @@ declare namespace IIIFComponents {
         private _$canvas;
         private _$wrapper;
         private _$toolbarDiv;
+        private _$toolbarCtrl;
         private _$toolbar;
         svgDrawPaper: any;
         private _hitOptions;

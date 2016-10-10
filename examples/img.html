@@ -6,42 +6,82 @@
     <link rel="stylesheet" type="text/css" href="css/svg-draw-component.css" />
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsviews/0.9.76/jsviews.min.js"></script>
     <script src="js/paper-full.min.js"></script>
     <script src="js/base-component.bundle.js"></script>
     <script src="js/svg-draw-component.js"></script>
+    <style>
+        // for demo page functionality
+        html {
+          font-size: 10px;
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+        body {
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-size: 14px;
+          line-height: 1.42857143;
+          color: #333333;
+          background-color: #ffffff;
+        }
+
+      .events {
+          width: 600px;
+          min-height: 200px;
+          background-color: #eee;
+          padding: 10px;
+          border-radius: 4px;
+          -webkit-transition: background-color .2s linear;
+          -moz-transition: background-color .2s linear;
+          -o-transition: background-color .2s linear;
+          -ms-transition: background-color .2s linear;
+          transition: background-color .2s linear;
+          clear: both;
+        }
+
+        .events-flash {
+            background-color: #eee;
+            -webkit-animation-name: demo;
+            -webkit-animation-duration: 900ms;
+            -webkit-animation-iteration-count: 1;
+            -webkit-animation-timing-function: ease-out;
+            animation-name: demo;
+            animation-duration: 900ms;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-out;
+        }
+
+        pre {
+            word-wrap: break-word;
+        }
+
+        @-webkit-keyframes demo {
+          0% {
+              background-color: #eee;
+          }
+          25% {
+              background-color: Yellow;
+          }
+          100% {
+              background-color: #eee;
+          }
+        }
+
+                @keyframes demo {
+          0% {
+              background-color: #eee;
+          }
+          25% {
+              background-color: Yellow;
+          }
+          100% {
+              background-color: #eee;
+          }
+        }
+    </style>
 </head>
 <body class="svg-draw-component">
-<!--
-    <ul class="tools">
-      <li class="tool-btn"><input id="pencil_btn" type="radio" name="toolbar" checked><label for="pencil_btn"><i class="fa fa-fw fa-pencil"></i></label></li>
-      <li class="tool-btn">
-        <input id="paint_btn" type="radio" name="toolbar">
-        <label for="paint_btn">
-          <i class="fa fa-fw fa-paint-brush"></i>
-        </label>
-      </li>
-      <li class="tool-btn">
-        <input id="erase_btn" type="radio" name="toolbar">
-        <label for="erase_btn">
-          <i class="fa fa-fw fa-eraser"></i>
-        </label>
-      </li>
-      <li class="separator"></li>
-      <li class="tool-btn">
-        <input id="move_btn" type="radio" name="toolbar">
-        <label for="move_btn">
-          <i class="fa fa-fw fa-arrows"></i>
-        </label>
-      </li>
-      <li class="tool-btn">
-        <input id="scale_btn" type="radio" name="toolbar">
-        <label for="scale_btn">
-          <i class="fa fa-fw fa-expand"></i>
-        </label>
-      </li>
-    </ul>
--->
+
     <div id="svgdraw"></div>
 
     <img id="subject" style="display:none;" src="img/floorplan.png"/>

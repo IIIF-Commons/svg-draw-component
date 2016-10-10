@@ -102,11 +102,20 @@ var IIIFComponents;
                 $('<li class="separator"></li>'),
                 $('<li class="tool-btn"><input id="selectTool" type="radio" name="toolbar" checked><label for="selectTool"><i class="fa fa-fw fa-arrows"></i></label></li>'),
             ];
-            this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
+            this._$toolbarDiv = $('<div class="toolbar toolbar-tools">');
+            this._$toolbarCtrl = $('<div class="ctrl ctrl-tools">Tools</div>');
             this._$toolbar = $('<ul class="tools">');
             this._$toolbar.append(tools);
+            this._$toolbarDiv.append(this._$toolbarCtrl);
             this._$toolbarDiv.append(this._$toolbar);
             this._$element.after(this._$toolbarDiv);
+            $('.toolbar').draggable({ handle: ".ctrl" });
+            $('.ctrl-layers').on("dblclick", function () {
+                $('.toolbar-layers').toggleClass('minToolbar');
+            });
+            $('.ctrl-tools').on("dblclick", function () {
+                $('.toolbar-tools').toggleClass('minToolbar');
+            });
             $('input').on('click', function (e) {
                 switch (e.target.id) {
                     case 'selectTool':

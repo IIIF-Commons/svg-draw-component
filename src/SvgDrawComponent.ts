@@ -9,6 +9,7 @@ namespace IIIFComponents {
         private _$canvas: JQuery;
         private _$wrapper: JQuery;
         private _$toolbarDiv: JQuery;
+        private _$toolbarCtrl: JQuery;
         private _$toolbar: JQuery;
         public svgDrawPaper: any;
         private _hitOptions: any;
@@ -115,7 +116,6 @@ namespace IIIFComponents {
         public addToolbar(): void {
           var _this = this;
           var tools = [
-                //$('<li><button id="selectTool">Select</button></li>'),
                 $('<li class="tool-btn"><input id="pointTool" type="radio" name="toolbar" checked><label for="pointTool"><i class="fa fa-fw fa-map-pin"></i></label></li>'),
                 $('<li class="tool-btn"><input id="lineTool" type="radio" name="toolbar" checked><label for="lineTool"><i class="fa fa-fw fa-pencil"></i></label></li>'),
                 $('<li class="tool-btn"><input id="cloudTool" type="radio" name="toolbar" checked><label for="cloudTool"><i class="fa fa-fw fa-cloud"></i></label></li>'),
@@ -123,11 +123,24 @@ namespace IIIFComponents {
                 $('<li class="separator"></li>'),
                 $('<li class="tool-btn"><input id="selectTool" type="radio" name="toolbar" checked><label for="selectTool"><i class="fa fa-fw fa-arrows"></i></label></li>'),
           ];
-          this._$toolbarDiv = $('<div id="toolbarDiv" class="toolbar"/>');
+          this._$toolbarDiv = $('<div class="toolbar toolbar-tools">');
+          this._$toolbarCtrl = $('<div class="ctrl ctrl-tools">Tools</div>');
           this._$toolbar = $('<ul class="tools">');
           this._$toolbar.append(tools);
+          this._$toolbarDiv.append(this._$toolbarCtrl);
           this._$toolbarDiv.append(this._$toolbar);
           this._$element.after(this._$toolbarDiv);
+
+          /* //////
+          // EVENT HANDLERS
+          */
+            (<any>$('.toolbar')).draggable({handle:".ctrl"});
+            $('.ctrl-layers').on("dblclick",function(){
+              $('.toolbar-layers').toggleClass('minToolbar');
+            });
+            $('.ctrl-tools').on("dblclick",function(){
+              $('.toolbar-tools').toggleClass('minToolbar');
+            });
 
           $('input').on( 'click', function(e) {
             switch (e.target.id) {
