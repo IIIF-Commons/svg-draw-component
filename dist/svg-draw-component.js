@@ -279,7 +279,7 @@ var IIIFComponents;
                     tmp.locked = true;
                 }
                 ;
-                return $('<li id="' + tmp.name + '" class="tool-btn ' + isActive + '"><input id="' + tmp.name + '-eye_btn" type="checkbox" name="toolbar" ' + isVisible + '><label for="' + tmp.name + '-eye_btn"> <i class="fa fa-fw fa-eye"></i></label><input id="' + tmp.name + '-lock_btn" type="checkbox" name="toolbar" ' + isLocked + '><label for="' + tmp.name + '-lock_btn"><i class="fa fa-fw fa-lock"></i></label><span>' + layer.name + '</span></li>');
+                return $('<li id="' + tmp.name + '" class="tool-btn ' + isActive + '"><input id="' + tmp.name + '-eye_btn" type="checkbox" name="' + tmp.name + '" ' + isVisible + '><label for="' + tmp.name + '-eye_btn"> <i class="fa fa-fw fa-eye"></i></label><input id="' + tmp.name + '-lock_btn" type="checkbox" name="toolbar" ' + isLocked + '><label for="' + tmp.name + '-lock_btn"><i class="fa fa-fw fa-lock"></i></label><span>' + layer.name + '</span></li>');
             });
             this._$layersToolbarDiv = $('<div class="toolbar toolbar-layers">');
             this._$layersToolbarCtrl = $('<div class="ctrl ctrl-layers">Layers</div>');
