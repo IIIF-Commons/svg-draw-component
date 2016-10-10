@@ -98,7 +98,39 @@
             svgdraw = new IIIFComponents.SvgDrawComponent({
               element: "#svgdraw",
               subjectType: "image",
-              subject: "subject"
+              subject: "subject",
+              toolbars: {
+                  tools: {
+                      show: true,
+                      buttons: [
+                          { name: 'point', fa_icon:'fa-map-pin'},
+                          { name: 'line', fa_icon:'fa-pencil'},
+                          { name: 'cloud', fa_icon:'fa-cloud'},
+                          { name: 'rect', fa_icon:'fa-stop'},
+                          { name: 'separator'},
+                          { name: 'select', fa_icon:'fa-arrows'}
+                      ]
+                  },
+                  layers: {
+                      show: true,
+                      presets: [{
+                          name: 'Walkable Areas',
+                          visible: true,
+                          locked: true,
+                          active: false
+                          // load svg?
+                          // export svg?
+                          // trash button?
+                        },
+                        {
+                          name: 'Points of Interest',
+                          visible: true,
+                          locked: true,
+                          active: true
+                        }
+                      ]
+                  },
+              }
             });
 
             function displayEvents(eventName, args){

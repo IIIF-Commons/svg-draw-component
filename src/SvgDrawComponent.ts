@@ -10,6 +10,8 @@ namespace IIIFComponents {
         private _$wrapper: JQuery;
         private _$toolbarDiv: JQuery;
         private _$toolbarCtrl: JQuery;
+        private _$layersToolbarDiv: JQuery;
+        private _$layersToolbarCtrl: JQuery;
         private _$toolbar: JQuery;
         public svgDrawPaper: any;
         private _hitOptions: any;
@@ -52,7 +54,17 @@ namespace IIIFComponents {
             this._$element.append(this._$wrapper);
 
             this.paperSetup(this._$canvas[0]);
-            this.addToolbar();
+
+            if(this.options.toolbars){
+                if(this.options.toolbars.tools){
+                    this.addToolsToolbar();
+                }
+                if(this.options.toolbars.layers){
+                    this.addLayersToolbar();
+                }
+                // Shared Event Handler
+                (<any>$('.toolbar')).draggable({handle:".ctrl"});
+            }
 
             return success;
         }
@@ -113,16 +125,65 @@ namespace IIIFComponents {
             this._emit(SvgDrawComponent.Events.SHAPEDELETED, payload);
         }
 
-        public addToolbar(): void {
+        private _slugify(text): string {
+            return text.toString().toLowerCase().trim()
+                .replace(/\s+/g, '-')           // Replace spaces with -
+                .replace(/&/g, '-and-')         // Replace & with 'and'
+                .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+                .replace(/\-\-+/g, '-');        // Replace multiple - with single -
+        }
+
+        public addLayersToolbar(): void {
           var _this = this;
-          var tools = [
-                $('<li class="tool-btn"><input id="pointTool" type="radio" name="toolbar" checked><label for="pointTool"><i class="fa fa-fw fa-map-pin"></i></label></li>'),
-                $('<li class="tool-btn"><input id="lineTool" type="radio" name="toolbar" checked><label for="lineTool"><i class="fa fa-fw fa-pencil"></i></label></li>'),
-                $('<li class="tool-btn"><input id="cloudTool" type="radio" name="toolbar" checked><label for="cloudTool"><i class="fa fa-fw fa-cloud"></i></label></li>'),
-                $('<li class="tool-btn"><input id="rectTool" type="radio" name="toolbar" checked><label for="rectTool"><i class="fa fa-fw fa-pencil-square"></i></label></li>'),
-                $('<li class="separator"></li>'),
-                $('<li class="tool-btn"><input id="selectTool" type="radio" name="toolbar" checked><label for="selectTool"><i class="fa fa-fw fa-arrows"></i></label></li>'),
-          ];
+
+          var layers = this.options.toolbars.layers.presets.map(function(layer) {
+              var isActive = '', isVisible = '', isLocked = '', tmp;
+
+              tmp = _this.addLayer(layer.name);
+              if(layer.active){
+                  isActive = 'selected';
+                  tmp.activate();
+              };
+              if(layer.visible){
+                  isVisible = 'checked';
+                  tmp.visible = true;
+              };
+              if(layer.locked){
+                  isLocked = 'checked';
+                  tmp.locked = true;
+              };
+              return $('<li id="'+ tmp.name +'" class="tool-btn '+ isActive +'"><input id="'+ tmp.name +'-eye_btn" type="checkbox" name="toolbar" '+ isVisible +'><label for="'+ tmp.name +'-eye_btn"> <i class="fa fa-fw fa-eye"></i></label><input id="'+ tmp.name +'-lock_btn" type="checkbox" name="toolbar" '+ isLocked +'><label for="'+ tmp.name +'-lock_btn"><i class="fa fa-fw fa-lock"></i></label><span>'+ layer.name +'</span></li>');
+          });
+
+          this._$layersToolbarDiv = $('<div class="toolbar toolbar-layers">');
+          this._$layersToolbarCtrl = $('<div class="ctrl ctrl-layers">Layers</div>');
+          this._$toolbar = $('<ul class="tools">');
+          this._$toolbar.append(layers);
+          this._$layersToolbarDiv.append(this._$layersToolbarCtrl);
+          this._$layersToolbarDiv.append(this._$toolbar);
+          this._$element.after(this._$layersToolbarDiv);
+
+          /* //////
+          // EVENT HANDLERS
+          */
+
+          $('.ctrl-layers').on("dblclick",function(){
+            $('.toolbar-layers').toggleClass('minToolbar');
+          });
+
+        }
+
+        public addToolsToolbar(): void {
+          var _this = this;
+
+          var tools = this.options.toolbars.tools.buttons.map(function(tool) {
+             if(tool.name === 'separator'){
+                 return $('<li class="separator"></li>');
+             }else{
+                 return $('<li class="tool-btn"><input id="'+tool.name+'Tool" type="radio" name="toolbar"><label for="'+tool.name+'Tool"><i class="fa fa-fw '+tool.fa_icon+'"></i></label></li>');
+             }
+          });
+
           this._$toolbarDiv = $('<div class="toolbar toolbar-tools">');
           this._$toolbarCtrl = $('<div class="ctrl ctrl-tools">Tools</div>');
           this._$toolbar = $('<ul class="tools">');
@@ -134,10 +195,7 @@ namespace IIIFComponents {
           /* //////
           // EVENT HANDLERS
           */
-            (<any>$('.toolbar')).draggable({handle:".ctrl"});
-            $('.ctrl-layers').on("dblclick",function(){
-              $('.toolbar-layers').toggleClass('minToolbar');
-            });
+
             $('.ctrl-tools').on("dblclick",function(){
               $('.toolbar-tools').toggleClass('minToolbar');
             });
@@ -179,13 +237,12 @@ namespace IIIFComponents {
         public addLayer(name?: string): any {
             var layer;
             if (name){
-                layer = new this.svgDrawPaper.Layer({ 'name': name });
+                layer = new this.svgDrawPaper.Layer({ 'name': this._slugify(name) });
             }else{
                 layer = new this.svgDrawPaper.Layer();
             }
             return layer;
         }
-
 
         public paperSetup(el: HTMLElement): void {
               var path, point, line, cloud, rectangle;

@@ -23,6 +23,7 @@ declare namespace IIIFComponents {
     interface ISvgDrawComponentOptions extends _Components.IBaseComponentOptions {
         subjectType?: string;
         subject?: any;
+        toolbars?: any;
     }
 }
 
@@ -90,6 +91,8 @@ declare namespace IIIFComponents {
         private _$wrapper;
         private _$toolbarDiv;
         private _$toolbarCtrl;
+        private _$layersToolbarDiv;
+        private _$layersToolbarCtrl;
         private _$toolbar;
         svgDrawPaper: any;
         private _hitOptions;
@@ -99,7 +102,9 @@ declare namespace IIIFComponents {
         pathCompleted(shape: any): void;
         pathUpdated(shape: any): void;
         pathDeleted(shape: any): void;
-        addToolbar(): void;
+        private _slugify(text);
+        addLayersToolbar(): void;
+        addToolsToolbar(): void;
         layers(name?: string): any;
         addLayer(name?: string): any;
         paperSetup(el: HTMLElement): void;

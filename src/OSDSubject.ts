@@ -47,7 +47,7 @@ namespace IIIFComponents {
 
         private addTools(): void {
             $(() => {
-                $('#toolbar').append($('<li><button id="drawmode">draw mode (off)</button></li>'));
+                $('ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="toolbar"><label for="drawmode"><i class="fa fa-fw fa-pencil-square"></i></label></li>'));
                 $('#drawmode').on('click', (e) => {
                     if (this.viewer.isMouseNavEnabled() === true) {
                         this.viewer.setMouseNavEnabled(false);
