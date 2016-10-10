@@ -1,3 +1,94 @@
+.svg-draw-component ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.svg-draw-component .tools {
+  background-color: #889;
+  border-left: 0;
+}
+.svg-draw-component .tools > li {
+  margin: 8px 8px;
+}
+.svg-draw-component .tools > li.separator {
+  margin: 8px 4px;
+  border-top: 1px solid #6e6e80;
+  border-bottom: 1px solid #a3a3b1;
+}
+.svg-draw-component .tool-btn > label {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px solid #4b4b57;
+  font-size: 12px;
+  border-radius: 2px;
+  padding: 8px;
+  color: #cdcdd4;
+  background-color: #889;
+  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2), inset 1px 1px 1px rgba(255, 255, 255, 0.3), inset -1px -1px 1px rgba(0, 0, 0, 0.3);
+  transition: background-color 125ms;
+  margin-right: 8px;
+}
+.svg-draw-component .tool-btn > input[type=checkbox],
+.svg-draw-component .tool-btn input[type=radio] {
+  position: absolute;
+  font-size: 0;
+  bottom: -1000;
+}
+.svg-draw-component .tool-btn > input[type=checkbox]:checked + label,
+.svg-draw-component .tool-btn input[type=radio]:checked + label {
+  background-color: #4b4b57;
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+.svg-draw-component .tool-btn > input[type=checkbox]:focus + label,
+.svg-draw-component .tool-btn input[type=radio]:focus + label {
+  box-shadow: 0 0 15px 1px #3498db;
+}
+.svg-draw-component .selected > span {
+  color: #f6f6f7;
+}
+.svg-draw-component .toolbar {
+  margin-top: 30px;
+  width: 250px;
+  border: 1px solid #707070;
+  box-shadow: 10px 10px 50px 5px rgba(0, 0, 0, 0.25);
+  padding: 1px;
+  background-color: #889;
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  z-index: 1000;
+}
+.svg-draw-component .minToolbar {
+  height: 0;
+  padding: 0;
+  border: none;
+}
+.svg-draw-component .minToolbar .tools {
+  display: none;
+}
+.svg-draw-component .toolbar .ctrl {
+  width: 100%;
+  height: 20px;
+  /* box-sizing: border-box; */
+  background-color: #4b4b57;
+  border: 1px solid #707070;
+  margin-top: -28px;
+  margin-left: -2px;
+  margin-bottom: 4px;
+  padding: 1px;
+  padding-left: 2px;
+  color: #f6f6f7;
+}
+.svg-draw-component .toolbar,
+.svg-draw-component .toolbar * {
+  border-radius: 2px;
+}
+.svg-draw-component .toolbar-tools {
+  width: 48px;
+  top: 150px;
+  z-index: 1000;
+}
 .svg-draw-component .openseadragon {
   width: 800px;
   height: 600px;
@@ -5,20 +96,6 @@
   color: #333;
   /* text color for messages */
   background-color: black;
-}
-.svg-draw-component .toolbar {
-  width: 800px;
-}
-.svg-draw-component ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-  float: right;
-}
-.svg-draw-component li {
-  float: left;
 }
 .svg-draw-component .navigator .highlight {
   width: 100%;
@@ -44,55 +121,7 @@
   width: 800px;
   height: 600px;
   /*margin:20px 60px; img/floorplan.png*/
+  margin-left: 5vw;
   border: 1px solid blue;
   background-color: rgba(158, 167, 184, 0.2);
-}
-.svg-draw-component .events {
-  width: 600px;
-  min-height: 200px;
-  background-color: #eee;
-  padding: 10px;
-  border-radius: 4px;
-  -webkit-transition: background-color 0.2s linear;
-  -moz-transition: background-color 0.2s linear;
-  -o-transition: background-color 0.2s linear;
-  -ms-transition: background-color 0.2s linear;
-  transition: background-color 0.2s linear;
-  clear: both;
-}
-.svg-draw-component .events-flash {
-  background-color: #eee;
-  -webkit-animation-name: demo;
-  -webkit-animation-duration: 900ms;
-  -webkit-animation-iteration-count: 1;
-  -webkit-animation-timing-function: ease-out;
-  animation-name: demo;
-  animation-duration: 900ms;
-  animation-iteration-count: 1;
-  animation-timing-function: ease-out;
-}
-.svg-draw-component pre {
-  word-wrap: break-word;
-}
-@-webkit-keyframes demo {
-  0% {
-    background-color: #eee;
-  }
-  25% {
-    background-color: Yellow;
-  }
-  100% {
-    background-color: #eee;
-  }
-}
-@keyframes demo {
-  0% {
-    background-color: #eee;
-  }
-  25% {
-    background-color: Yellow;
-  }
-  100% {
-    background-color: #eee;
-  }
 }
