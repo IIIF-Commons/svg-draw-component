@@ -1,6 +1,147 @@
 @img-path: "../img/";
 
+
 .svg-draw-component{
+
+    // for toolbars
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    @color-b: #889;
+    @color-d1: darken(@color-b, 10%);
+    @color-d2: darken(@color-b, 25%);
+    @color-d3: darken(@color-b, 40%);
+
+    @foreground: red;
+    @background: blue;
+
+    //@foreground: #C4C4C4;
+    //@background: #8F8F8F;
+    @stroke: #707070;
+
+    @color-l1: lighten(@color-b, 10%);
+    @color-l2: lighten(@color-b, 25%);
+    @color-l3: lighten(@color-b, 40%);
+
+    @unit: 8px;
+
+    .pressable(@off, @on) {
+
+      > label {
+        position: relative;
+
+        display: inline-block;
+        box-sizing: border-box;
+        border: 1px solid @color-d2;
+        font-size: @unit * 3 / 2;
+        border-radius: @unit / 4;
+        padding: @unit;
+        color: @color-l2;
+
+        background-color: @off;
+        box-shadow:
+          1px 1px 3px 1px rgba(0,0,0,0.2),
+          inset 1px 1px 1px rgba(255,255,255,0.3),
+          inset -1px -1px 1px rgba(0,0,0,0.3);
+
+        transition: background-color 125ms;
+        margin-right: @unit;
+      }
+
+      > input[type=checkbox], input[type=radio],{
+        position: absolute;
+        font-size: 0;
+        bottom: -1000;
+      }
+
+      > input[type=checkbox]:checked + label, input[type=radio]:checked + label {
+        background-color: @on;
+        box-shadow:
+          inset 1px 1px 1px rgba(0,0,0,0.3);
+      }
+
+      > input[type=checkbox]:focus + label,input[type=radio]:focus + label {
+        box-shadow: 0 0 15px 1px #3498db;
+      }
+    }
+
+    .tools {
+      background-color: @color-b;
+      // border: 1px solid @color-d1;
+      border-left: 0;
+
+
+      > li {
+        margin: @unit @unit;
+      }
+
+      > li.separator {
+        margin: @unit @unit / 2;
+        border-top: 1px solid @color-d1;
+        border-bottom: 1px solid @color-l1;
+      }
+    }
+
+    .tool-btn {
+      .pressable(@color-b, @color-d2);
+    }
+
+    .selected > span {
+      color: @color-l3;
+    }
+
+    .toolbar{
+      //position: relative;
+      margin-top: 30px;
+      width: 250px;
+      border: 1px solid @stroke;
+      box-shadow: 10px 10px 50px 5px rgba(0,0,0,0.25);
+      padding:1px;
+      background-color: @color-b;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      z-index: 1000;
+    }
+
+    .minToolbar{
+      height: 0;
+      padding:0;
+      border: none;
+    }
+
+    .minToolbar .tools{
+      display:none;
+    }
+
+    .toolbar .ctrl{
+      width: 100%;
+      height: 20px;
+      /* box-sizing: border-box; */
+      background-color: @color-d2;
+      border: 1px solid @stroke;
+      margin-top: -28px;
+      margin-left: -2px;
+      margin-bottom: 4px;
+      padding: 1px;
+      padding-left: 2px;
+      color: @color-l3;
+    }
+
+    .toolbar, .toolbar *{
+      border-radius: 2px;
+    }
+
+    .toolbar-tools{
+      width: @unit * 6;
+      top: 150px;
+      z-index: 1000;
+    }
+
+// openseadragon
 
   .openseadragon
   {
@@ -9,24 +150,7 @@
       border:     1px solid black;
       color:      #333; /* text color for messages */
       background-color: black;
-  }
-
-  .toolbar
-  {
-    width: 800px;
-  }
-
-ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #333;
-      float: right;
-  }
-
-li {
-      float: left;
+      //margin-left: 5vw;
   }
 
   .navigator .highlight{
@@ -52,66 +176,12 @@ li {
   }
 
 
-  // for plain canvas
+// for plain canvas
   .paper{
         width:800px; height:600px;
         /*margin:20px 60px; img/floorplan.png*/
+        margin-left: 5vw;
         border:1px solid blue;
         background-color: rgba(158, 167, 184, 0.2);}
-
-  // for demos
-  .events {
-      width: 600px;
-      min-height: 200px;
-      background-color: #eee;
-      padding: 10px;
-      border-radius: 4px;
-      -webkit-transition: background-color .2s linear;
-      -moz-transition: background-color .2s linear;
-      -o-transition: background-color .2s linear;
-      -ms-transition: background-color .2s linear;
-      transition: background-color .2s linear;
-      clear: both;
-    }
-
-    .events-flash {
-        background-color: #eee;
-        -webkit-animation-name: demo;
-        -webkit-animation-duration: 900ms;
-        -webkit-animation-iteration-count: 1;
-        -webkit-animation-timing-function: ease-out;
-        animation-name: demo;
-        animation-duration: 900ms;
-        animation-iteration-count: 1;
-        animation-timing-function: ease-out;
-    }
-
-    pre {
-        word-wrap: break-word;
-    }
-
-    @-webkit-keyframes demo {
-      0% {
-          background-color: #eee;
-      }
-      25% {
-          background-color: Yellow;
-      }
-      100% {
-          background-color: #eee;
-      }
-    }
-
-            @keyframes demo {
-      0% {
-          background-color: #eee;
-      }
-      25% {
-          background-color: Yellow;
-      }
-      100% {
-          background-color: #eee;
-      }
-    }
 
 }
