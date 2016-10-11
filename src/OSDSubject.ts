@@ -44,19 +44,21 @@ namespace IIIFComponents {
             paper.view.viewSize.height = $( "#canvas-1" ).height();
 
         }
+        /*
+        <a class="btn btn-danger" href="path/to/settings" aria-label="Delete">
+          <i class="fa fa-trash-o" aria-hidden="true" title="Delete this item?"></i>
+        </a>
+        */
 
         private addTools(): void {
             $(() => {
-                $('.toolbar-tools ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="drawmode"><label for="drawmode"><i class="fa fa-fw fa-pencil-square"></i></label></li>'));
+                $('.toolbar-tools ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="drawmode" aria-label="Draw Mode Toggle"><label for="drawmode"><i class="fa fa-fw fa-pencil-square" aria-hidden="true" title="Toggle Draw Mode?"></i></label></li>'));
                 $('#drawmode').on('click', (e) => {
                     if (this.viewer.isMouseNavEnabled() === true) {
                         this.viewer.setMouseNavEnabled(false);
-                        //$(e.target).text('draw mode (on)');
                     } else {
                         this.viewer.setMouseNavEnabled(true);
-                        //$(e.target).text('draw mode (off)');
                     }
-                    //return false;
                 });
             });
         }
