@@ -152,7 +152,7 @@ namespace IIIFComponents {
                   isLocked = 'checked';
                   tmp.locked = true;
               };
-              return $('<li id="'+ tmp.name +'" class="tool-btn '+ isActive +'"><input id="'+ tmp.name +'-eye_btn" class="eye_btn" type="checkbox" name="'+ tmp.name +'" '+ isVisible +'><label for="'+ tmp.name +'-eye_btn"> <i class="fa fa-fw fa-eye"></i></label><input id="'+ tmp.name +'-lock_btn" class="lock_btn" type="checkbox" name="'+ tmp.name +'" '+ isLocked +'><label for="'+ tmp.name +'-lock_btn"><i class="fa fa-fw fa-lock"></i></label><span>'+ layer.name +'</span></li>');
+              return $('<li id="'+ tmp.name +'" class="tool-btn '+ isActive +'"><input id="'+ tmp.name +'-eye_btn" class="eye_btn" aria-label="Layer Visibility Toggle" type="checkbox" name="'+ tmp.name +'" '+ isVisible +'><label for="'+ tmp.name +'-eye_btn"> <i class="fa fa-fw fa-eye" aria-hidden="true" title="Toggle layer visibility?"></i></label><input id="'+ tmp.name +'-lock_btn" class="lock_btn" aria-label="Lock Layer Toggle" type="checkbox" name="'+ tmp.name +'" '+ isLocked +'><label for="'+ tmp.name +'-lock_btn"><i class="fa fa-fw fa-lock" aria-hidden="true" title="Toggle layer lock?"></i></label><span>'+ layer.name +'</span></li>');
           });
 
           this._$layersToolbarDiv = $('<div class="toolbar toolbar-layers">');
@@ -204,7 +204,7 @@ namespace IIIFComponents {
              if(tool.name === 'separator'){
                  return $('<li class="separator"></li>');
              }else{
-                 return $('<li class="tool-btn"><input id="'+tool.name+'Tool" type="radio" name="toolbar"><label for="'+tool.name+'Tool"><i class="fa fa-fw '+tool.fa_icon+'"></i></label></li>');
+                 return $('<li class="tool-btn"><input id="'+tool.name+'Tool" type="radio" name="toolbar" aria-label="'+tool.name+' tool"><label for="'+tool.name+'Tool"><i class="fa fa-fw '+tool.fa_icon+'" aria-hidden="true" title="'+tool.name+' tool"></i></label></li>');
              }
           });
 

@@ -70,20 +70,22 @@ var IIIFComponents;
             paper.view.viewSize.width = $("#canvas-1").width();
             paper.view.viewSize.height = $("#canvas-1").height();
         };
+        /*
+        <a class="btn btn-danger" href="path/to/settings" aria-label="Delete">
+          <i class="fa fa-trash-o" aria-hidden="true" title="Delete this item?"></i>
+        </a>
+        */
         OSDSubject.prototype.addTools = function () {
             var _this = this;
             $(function () {
-                $('ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="toolbar"><label for="drawmode"><i class="fa fa-fw fa-pencil-square"></i></label></li>'));
+                $('.toolbar-tools ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="drawmode" aria-label="Draw Mode Toggle"><label for="drawmode"><i class="fa fa-fw fa-pencil-square" aria-hidden="true" title="Toggle Draw Mode?"></i></label></li>'));
                 $('#drawmode').on('click', function (e) {
                     if (_this.viewer.isMouseNavEnabled() === true) {
                         _this.viewer.setMouseNavEnabled(false);
-                        $(e.target).text('draw mode (on)');
                     }
                     else {
                         _this.viewer.setMouseNavEnabled(true);
-                        $(e.target).text('draw mode (off)');
                     }
-                    return false;
                 });
             });
         };
@@ -279,7 +281,7 @@ var IIIFComponents;
                     tmp.locked = true;
                 }
                 ;
-                return $('<li id="' + tmp.name + '" class="tool-btn ' + isActive + '"><input id="' + tmp.name + '-eye_btn" class="eye_btn" type="checkbox" name="' + tmp.name + '" ' + isVisible + '><label for="' + tmp.name + '-eye_btn"> <i class="fa fa-fw fa-eye"></i></label><input id="' + tmp.name + '-lock_btn" class="lock_btn" type="checkbox" name="' + tmp.name + '" ' + isLocked + '><label for="' + tmp.name + '-lock_btn"><i class="fa fa-fw fa-lock"></i></label><span>' + layer.name + '</span></li>');
+                return $('<li id="' + tmp.name + '" class="tool-btn ' + isActive + '"><input id="' + tmp.name + '-eye_btn" class="eye_btn" aria-label="Layer Visibility Toggle" type="checkbox" name="' + tmp.name + '" ' + isVisible + '><label for="' + tmp.name + '-eye_btn"> <i class="fa fa-fw fa-eye" aria-hidden="true" title="Toggle layer visibility?"></i></label><input id="' + tmp.name + '-lock_btn" class="lock_btn" aria-label="Lock Layer Toggle" type="checkbox" name="' + tmp.name + '" ' + isLocked + '><label for="' + tmp.name + '-lock_btn"><i class="fa fa-fw fa-lock" aria-hidden="true" title="Toggle layer lock?"></i></label><span>' + layer.name + '</span></li>');
             });
             this._$layersToolbarDiv = $('<div class="toolbar toolbar-layers">');
             this._$layersToolbarCtrl = $('<div class="ctrl ctrl-layers">Layers</div>');
@@ -322,7 +324,7 @@ var IIIFComponents;
                     return $('<li class="separator"></li>');
                 }
                 else {
-                    return $('<li class="tool-btn"><input id="' + tool.name + 'Tool" type="radio" name="toolbar"><label for="' + tool.name + 'Tool"><i class="fa fa-fw ' + tool.fa_icon + '"></i></label></li>');
+                    return $('<li class="tool-btn"><input id="' + tool.name + 'Tool" type="radio" name="toolbar" aria-label="' + tool.name + ' tool"><label for="' + tool.name + 'Tool"><i class="fa fa-fw ' + tool.fa_icon + '" aria-hidden="true" title="' + tool.name + ' tool"></i></label></li>');
                 }
             });
             this._$toolbarDiv = $('<div class="toolbar toolbar-tools">');
