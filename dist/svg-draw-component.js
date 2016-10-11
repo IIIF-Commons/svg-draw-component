@@ -279,7 +279,7 @@ var IIIFComponents;
                     tmp.locked = true;
                 }
                 ;
-                return $('<li id="' + tmp.name + '" class="tool-btn ' + isActive + '"><input id="' + tmp.name + '-eye_btn" type="checkbox" name="' + tmp.name + '" ' + isVisible + '><label for="' + tmp.name + '-eye_btn"> <i class="fa fa-fw fa-eye"></i></label><input id="' + tmp.name + '-lock_btn" type="checkbox" name="toolbar" ' + isLocked + '><label for="' + tmp.name + '-lock_btn"><i class="fa fa-fw fa-lock"></i></label><span>' + layer.name + '</span></li>');
+                return $('<li id="' + tmp.name + '" class="tool-btn ' + isActive + '"><input id="' + tmp.name + '-eye_btn" class="eye_btn" type="checkbox" name="' + tmp.name + '" ' + isVisible + '><label for="' + tmp.name + '-eye_btn"> <i class="fa fa-fw fa-eye"></i></label><input id="' + tmp.name + '-lock_btn" class="lock_btn" type="checkbox" name="' + tmp.name + '" ' + isLocked + '><label for="' + tmp.name + '-lock_btn"><i class="fa fa-fw fa-lock"></i></label><span>' + layer.name + '</span></li>');
             });
             this._$layersToolbarDiv = $('<div class="toolbar toolbar-layers">');
             this._$layersToolbarCtrl = $('<div class="ctrl ctrl-layers">Layers</div>');
@@ -293,6 +293,26 @@ var IIIFComponents;
             */
             $('.ctrl-layers').on("dblclick", function () {
                 $('.toolbar-layers').toggleClass('minToolbar');
+            });
+            $('.toolbar-layers input').on('click', function (e) {
+                var target = e.target;
+                switch (e.target.className) {
+                    case 'eye_btn':
+                        _this.svgDrawPaper.project.layers[target.name].visible = !_this.svgDrawPaper.project.layers[target.name].visible;
+                        break;
+                    case 'lock_btn':
+                        _this.svgDrawPaper.project.layers[target.name].locked = !_this.svgDrawPaper.project.layers[target.name].locked;
+                        break;
+                }
+            });
+            $('.toolbar-layers span').on('click', function (e) {
+                var target = e.target;
+                // clear select class
+                $('.toolbar-layers li').removeClass('selected');
+                // activate parent
+                _this.svgDrawPaper.project.layers[target.parentElement.id].activate();
+                // add select class
+                $('li#' + target.parentElement.id).addClass('selected');
             });
         };
         SvgDrawComponent.prototype.addToolsToolbar = function () {
@@ -318,7 +338,7 @@ var IIIFComponents;
             $('.ctrl-tools').on("dblclick", function () {
                 $('.toolbar-tools').toggleClass('minToolbar');
             });
-            $('input').on('click', function (e) {
+            $('.toolbar-tools input').on('click', function (e) {
                 switch (e.target.id) {
                     case 'selectTool':
                         _this.svgDrawPaper.selectTool.activate();
