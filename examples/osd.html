@@ -25,6 +25,7 @@
           line-height: 1.42857143;
           color: #333333;
           background-color: #ffffff;
+          padding: 5vw;
         }
     </style>
 </head>
@@ -60,7 +61,36 @@
                 svgdraw = new IIIFComponents.SvgDrawComponent({
                     element: "#svgdraw",
                     subjectType: "openseadragon",
-                    subject: osd_config
+                    subject: osd_config,
+                    toolbars: {
+                        tools: {
+                            show: true,
+                            buttons: [
+                                { name: 'point', fa_icon:'fa-map-pin'},
+                                { name: 'line', fa_icon:'fa-pencil'},
+                                { name: 'cloud', fa_icon:'fa-cloud'},
+                                { name: 'rect', fa_icon:'fa-stop'},
+                                { name: 'separator'},
+                                { name: 'select', fa_icon:'fa-arrows'}
+                            ]
+                        },
+                        layers: {
+                            show: true,
+                            presets: [{
+                                name: 'Walkable Areas',
+                                visible: true,
+                                locked: false,
+                                active: false
+                              },
+                              {
+                                name: 'Points of Interest',
+                                visible: true,
+                                locked: false,
+                                active: true
+                              }
+                            ]
+                        },
+                    }
                 });
 
           });

@@ -47,16 +47,16 @@ namespace IIIFComponents {
 
         private addTools(): void {
             $(() => {
-                $('ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="toolbar"><label for="drawmode"><i class="fa fa-fw fa-pencil-square"></i></label></li>'));
+                $('.toolbar-tools ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="drawmode"><label for="drawmode"><i class="fa fa-fw fa-pencil-square"></i></label></li>'));
                 $('#drawmode').on('click', (e) => {
                     if (this.viewer.isMouseNavEnabled() === true) {
                         this.viewer.setMouseNavEnabled(false);
-                        $(e.target).text('draw mode (on)');
+                        //$(e.target).text('draw mode (on)');
                     } else {
                         this.viewer.setMouseNavEnabled(true);
-                        $(e.target).text('draw mode (off)');
+                        //$(e.target).text('draw mode (off)');
                     }
-                    return false;
+                    //return false;
                 });
             });
         }

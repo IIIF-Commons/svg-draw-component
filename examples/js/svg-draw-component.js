@@ -73,17 +73,15 @@ var IIIFComponents;
         OSDSubject.prototype.addTools = function () {
             var _this = this;
             $(function () {
-                $('ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="toolbar"><label for="drawmode"><i class="fa fa-fw fa-pencil-square"></i></label></li>'));
+                $('.toolbar-tools ul.tools').append($('<li class="tool-btn"><input id="drawmode" type="checkbox" name="drawmode"><label for="drawmode"><i class="fa fa-fw fa-pencil-square"></i></label></li>'));
                 $('#drawmode').on('click', function (e) {
                     if (_this.viewer.isMouseNavEnabled() === true) {
                         _this.viewer.setMouseNavEnabled(false);
-                        $(e.target).text('draw mode (on)');
                     }
                     else {
                         _this.viewer.setMouseNavEnabled(true);
-                        $(e.target).text('draw mode (off)');
                     }
-                    return false;
+                    //return false;
                 });
             });
         };
