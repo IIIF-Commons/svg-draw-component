@@ -1,7 +1,7 @@
 # svg-draw-component
 
 Default, Image Overlay, and OpenSeadragon (deep zoom) examples:
-http://sdellis.com/svg-draw-component/examples/
+https://viewdir.github.io/svg-draw-component/examples/
 
 ##Get Started
 ```
