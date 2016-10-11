@@ -15,3 +15,7 @@ https://viewdir.github.io/svg-draw-component/examples/
 ##Notes
 
 Work in progress!
+
+## License
+
+[MIT](LICENSE)
