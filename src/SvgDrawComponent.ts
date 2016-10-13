@@ -77,8 +77,11 @@ namespace IIIFComponents {
             var payload = {}
             var media_fragment_coords = null;
             var $svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
+            var $layer_svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
             var $shape = $( shape.exportSVG({matchShapes:true}) );
+            var $layer = $( shape.layer.exportSVG({matchShapes:true}) );
             $svg.append($shape);
+            $layer_svg.append($layer);
             shape.name = $shape[0].tagName + "_" + shape._id;
             if($shape[0].tagName === 'rect' && shape.rotation === 0){ // if a non-rotated rectangle
                 media_fragment_coords = {
@@ -91,7 +94,8 @@ namespace IIIFComponents {
             payload = {
                   'name': shape.name,
                   'media_fragment_coords':media_fragment_coords,
-                  'svg': $svg[0].outerHTML
+                  'svg': $svg[0].outerHTML,
+                  'layer_svg': $layer_svg[0].outerHTML
               }
 
             this._emit(SvgDrawComponent.Events.SHAPECOMPLETED, payload);
@@ -101,8 +105,11 @@ namespace IIIFComponents {
             var payload = {}
             var media_fragment_coords = null;
             var $svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
+            var $layer_svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
             var $shape = $( shape.exportSVG({matchShapes:true}) );
+            var $layer = $( shape.layer.exportSVG({matchShapes:true}) );
             $svg.append($shape);
+            $layer_svg.append($layer);
             if($shape[0].tagName === 'rect' && shape.rotation === 0){ // if a non-rotated rectangle
                 media_fragment_coords = {
                     'x': shape.bounds.x,
@@ -114,14 +121,21 @@ namespace IIIFComponents {
             payload = {
                   'name': shape.name,
                   'media_fragment_coords':media_fragment_coords,
-                  'svg': $svg[0].outerHTML
+                  'svg': $svg[0].outerHTML,
+                  'layer_svg': $layer_svg[0].outerHTML
               }
 
             this._emit(SvgDrawComponent.Events.SHAPEUPDATED, payload);
         }
 
-        public pathDeleted(shape): void {
-            var payload = { 'name': shape.name };
+        public pathDeleted(name,layer): void {
+            var $layer_svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
+            var $layer = $( layer.exportSVG({matchShapes:true}) );
+            $layer_svg.append($layer);
+            var payload = {
+                'name': name,
+                'layer_svg': $layer_svg[0].outerHTML
+            };
             this._emit(SvgDrawComponent.Events.SHAPEDELETED, payload);
         }
 
@@ -318,9 +332,11 @@ namespace IIIFComponents {
 
                         for (var i = 0; i < selected.length; i++) {
                         	var item = selected[i];
-                            // todo: allow other components to confirm delete?
-                            _this.pathDeleted(item); // fire delete event
-                        	item.remove();
+                            var name = item.name;
+                            var layer = item.layer;
+                            item.remove();
+                            _this.pathDeleted(name,layer); // fire delete event
+
                         }
                         return false;
                     }
@@ -339,9 +355,10 @@ namespace IIIFComponents {
                 this.svgDrawPaper.pointTool.onMouseUp = function(event) {
                   var pointCopy = point.clone();
                   pointCopy.selected = true;
-                  //_this.svgDrawPaper.selectTool.activate();
-                  _this.pathCompleted(pointCopy); // fire event
                   point.remove();
+
+                  _this.pathCompleted(pointCopy); // fire event
+
                 }
 
               ////// S T R A I G H T  L I N E S ////////////
@@ -360,10 +377,11 @@ namespace IIIFComponents {
                 line.closed = true;
                 line.simplify();
                 var lineCopy = line.clone();
-                lineCopy.selected = true;
-                //_this.svgDrawPaper.selectTool.activate();
-                _this.pathCompleted(lineCopy); // fire event
                 line.remove();
+                lineCopy.selected = true;
+
+                _this.pathCompleted(lineCopy); // fire event
+
               }
 
               ////// C L O U D Y  L I N E S ////////////
@@ -383,10 +401,9 @@ namespace IIIFComponents {
               this.svgDrawPaper.cloudTool.onMouseUp = function(event) {
                 cloud.closed = true;
                 var cloudCopy = cloud.clone();
-                cloudCopy.selected = true;
-                //_this.svgDrawPaper.selectTool.activate();
-                _this.pathCompleted(cloudCopy); // fire event
                 cloud.remove();
+                cloudCopy.selected = true;
+                _this.pathCompleted(cloudCopy); // fire event
               }
 
               ////// R E C T A N G L E ////////////
@@ -400,10 +417,9 @@ namespace IIIFComponents {
 
               this.svgDrawPaper.rectTool.onMouseUp = function(event) {
                 var rectCopy = rectangle.clone();
-                rectCopy.selected = true;
-                //_this.svgDrawPaper.selectTool.activate();
-                _this.pathCompleted(rectCopy);
                 rectangle.remove();
+                rectCopy.selected = true;
+                _this.pathCompleted(rectCopy);
               }
 
               function drawRect(start, end) {
