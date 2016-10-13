@@ -79,9 +79,11 @@ namespace IIIFComponents {
             var $svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
             var $layer_svg = $( "<svg xmlns='http://www.w3.org/2000/svg'/>" );
             var $shape = $( shape.exportSVG({matchShapes:true}) );
-            var $layer = $( shape.layer.exportSVG({matchShapes:true}) );
             $svg.append($shape);
-            $layer_svg.append($layer);
+            if(shape.layer){
+                var $layer = $( shape.layer.exportSVG({matchShapes:true}) );
+                $layer_svg.append($layer);
+            }
             shape.name = $shape[0].tagName + "_" + shape._id;
             if($shape[0].tagName === 'rect' && shape.rotation === 0){ // if a non-rotated rectangle
                 media_fragment_coords = {
@@ -416,10 +418,12 @@ namespace IIIFComponents {
               }
 
               this.svgDrawPaper.rectTool.onMouseUp = function(event) {
-                var rectCopy = rectangle.clone();
-                rectangle.remove();
-                rectCopy.selected = true;
-                _this.pathCompleted(rectCopy);
+                if(rectangle){
+                    var rectCopy = rectangle.clone();
+                    rectangle.remove();
+                    rectCopy.selected = true;
+                    _this.pathCompleted(rectCopy);
+                }
               }
 
               function drawRect(start, end) {
