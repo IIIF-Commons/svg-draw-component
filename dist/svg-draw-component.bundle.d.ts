@@ -134,7 +134,7 @@ declare namespace IIIFComponents {
         debug(): void;
         pathCompleted(shape: any): void;
         pathUpdated(shape: any): void;
-        pathDeleted(shape: any): void;
+        pathDeleted(name: any, layer: any): void;
         private _slugify(text);
         addLayersToolbar(): void;
         addToolsToolbar(): void;
