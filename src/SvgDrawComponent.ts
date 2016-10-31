@@ -303,9 +303,19 @@ namespace IIIFComponents {
               this.svgDrawPaper.selectTool = new this.svgDrawPaper.Tool();
 
               this.svgDrawPaper.selectTool.onMouseDown = function(event) {
-              	_this.svgDrawPaper.project.activeLayer.selected = false;
+
               	if (event.item){
-              		event.item.selected = true;
+                    if (!event.modifiers.shift) {
+                        _this.svgDrawPaper.project.activeLayer.selected = false;
+                        event.item.selected = true;
+                    } else {
+                        // if shift is held allow multi-select and
+                        // toggle item select without affecting other selected items
+                        event.item.selected = !event.item.selected;
+                    }
+
+                } else {
+                    _this.svgDrawPaper.project.activeLayer.selected = false;
                 }
               }
 
@@ -456,6 +466,8 @@ namespace IIIFComponents.SvgDrawComponent {
         static SHAPEUPDATED: string = 'shapeUpdated';
         static SHAPEDELETED: string = 'shapeDeleted';
         static SVGLOADED: string = 'svgLoaded';
+        //static SHAPESELECTED: string = 'shapeSelected';
+        //static SHAPEDESELECTED: string = 'shapeDeselected';
     }
 }
 

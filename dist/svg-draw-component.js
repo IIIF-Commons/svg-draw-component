@@ -412,9 +412,19 @@ var IIIFComponents;
             ////// S E L E C T   T O O L ////////////
             this.svgDrawPaper.selectTool = new this.svgDrawPaper.Tool();
             this.svgDrawPaper.selectTool.onMouseDown = function (event) {
-                _this.svgDrawPaper.project.activeLayer.selected = false;
                 if (event.item) {
-                    event.item.selected = true;
+                    if (!event.modifiers.shift) {
+                        _this.svgDrawPaper.project.activeLayer.selected = false;
+                        event.item.selected = true;
+                    }
+                    else {
+                        // if shift is held allow multi-select and
+                        // toggle item select without affecting other selected items
+                        event.item.selected = !event.item.selected;
+                    }
+                }
+                else {
+                    _this.svgDrawPaper.project.activeLayer.selected = false;
                 }
             };
             this.svgDrawPaper.selectTool.onMouseDrag = function (event) {
