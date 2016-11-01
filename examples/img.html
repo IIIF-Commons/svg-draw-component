@@ -161,6 +161,18 @@
                 displayEvents('svgLoaded',args);
             });
 
+            svgdraw.on('selectionStateChange', function(args) {
+                //console.log(args[0].selected_items.length);
+
+                var s = args[0].selected_items.length;
+
+                for (var i = 0; i < s; i++) {
+                    console.log(args[0].selected_items[i].name);
+                }
+
+                displayEvents('selectionStateChange',args);
+            });
+
             function loadSVG(){
                 svgdraw.importSVG('<svg xmlns="http://www.w3.org/2000/svg"><rect x="506" y="284" width="71" height="103" fill="#ffffff" fill-rule="nonzero" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" opacity="0.5" style="mix-blend-mode: normal"></rect></svg>');
                 return false;

@@ -141,6 +141,35 @@ namespace IIIFComponents {
             this._emit(SvgDrawComponent.Events.SHAPEDELETED, payload);
         }
 
+        public selectionStateChange(layer): void {
+            var payload = {};
+
+            function getSelected(item) {
+              if(item.selected){
+                  return item;
+              }
+            }
+
+            function getUnSelected(item) {
+              if(!item.selected){
+                  return item;
+              }
+            }
+
+            var selectedItems = layer.children.filter(getSelected);
+            var unselectedItems = layer.children.filter(getUnSelected);
+
+            // current selected state of layer children
+            payload = {
+                'selected_items': selectedItems,
+                'unselected_items': unselectedItems,
+                'layer_name': layer.name
+            };
+
+            this._emit(SvgDrawComponent.Events.SELECTIONSTATECHANGE, payload);
+
+        }
+
         private _slugify(text): string {
             return text.toString().toLowerCase().trim()
                 .replace(/\s+/g, '-')           // Replace spaces with -
@@ -303,10 +332,21 @@ namespace IIIFComponents {
               this.svgDrawPaper.selectTool = new this.svgDrawPaper.Tool();
 
               this.svgDrawPaper.selectTool.onMouseDown = function(event) {
-              	_this.svgDrawPaper.project.activeLayer.selected = false;
-              	if (event.item){
-              		event.item.selected = true;
+
+                if (event.item && event.modifiers.shift){
+                    // if shift is held allow multi-select and
+                    // toggle item select without affecting other selected items
+                    event.item.selected = !event.item.selected;
+                } else {
+                    _this.svgDrawPaper.project.activeLayer.selected = false;
+                    // throw shapeDeselected event
+                    if(event.item){
+                        event.item.selected = true;
+                    }
                 }
+
+                _this.selectionStateChange(_this.svgDrawPaper.project.activeLayer); // fire event
+
               }
 
               this.svgDrawPaper.selectTool.onMouseDrag = function(event) {
@@ -456,6 +496,7 @@ namespace IIIFComponents.SvgDrawComponent {
         static SHAPEUPDATED: string = 'shapeUpdated';
         static SHAPEDELETED: string = 'shapeDeleted';
         static SVGLOADED: string = 'svgLoaded';
+        static SELECTIONSTATECHANGE: string = 'selectionStateChange';
     }
 }
 

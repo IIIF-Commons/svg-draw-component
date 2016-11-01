@@ -102,6 +102,7 @@ declare namespace IIIFComponents {
         pathCompleted(shape: any): void;
         pathUpdated(shape: any): void;
         pathDeleted(name: any, layer: any): void;
+        selectionStateChange(layer: any): void;
         private _slugify(text);
         addLayersToolbar(): void;
         addToolsToolbar(): void;
@@ -119,5 +120,6 @@ declare namespace IIIFComponents.SvgDrawComponent {
         static SHAPEUPDATED: string;
         static SHAPEDELETED: string;
         static SVGLOADED: string;
+        static SELECTIONSTATECHANGE: string;
     }
 }
